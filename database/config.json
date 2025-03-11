@@ -1,7 +1,0 @@
-{
-    "dbHost": "localhost",
-    "dbPort": 5432,
-    "dbDatabase": "zt-ehealth",
-    "dbUser": "postgres",
-    "dbPassword": "zerotrust"
-}
