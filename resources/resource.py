@@ -1,20 +1,13 @@
 import os
-import json
 import socket
 import threading
 
-def start():
-    try:
-        with open(os.path.dirname(os.path.abspath(__file__)) + "/config.json") as file:
-            resources = json.load(file)
-    except:
-        exit()
+def get_ip():
+    hostname = socket.gethostname()
+    return socket.gethostbyname(hostname)
 
-    for resource in resources:
-        thread = threading.Thread(target=start_resource, args=(resource["resource"], resource["ip_address"], resource["port"]))
-        thread.start()
-
-def start_resource(name, ip, port):
+def start_resource(name, port):
+    ip = get_ip()
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((ip, port))
     sock.listen()
@@ -23,7 +16,6 @@ def start_resource(name, ip, port):
         conn, addr = sock.accept()
         print(f'Connection received from {addr}')
 
-        # Inicia uma nova thread para tratar a conexão
         t = threading.Thread(target=handle_conection, args=(conn, name))
         t.start()
 
@@ -34,4 +26,7 @@ def handle_conection(conn, resourceName):
 
 
 if __name__ == '__main__':
-    start()
+    resource_name = os.getenv("RESOURCE_NAME", "Recurso Desconhecido")
+    port = int(os.getenv("PORT", 5000))
+
+    start_resource(resource_name, port)
