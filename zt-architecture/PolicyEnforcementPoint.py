@@ -3,22 +3,28 @@ import ssl
 import concurrent.futures
 import os
 import logging
-import json
 import Response
 from PolicyDecisionPoint import PolicyDecisionPoint
 
 class PolicyEnforcementPoint:
+    config = {
+        "ip_address": None,
+        "port": None
+    }
     
     def __init__(self) -> None:
         try:
-            with open(os.path.dirname(os.path.abspath(__file__)) + "/config.json") as file:
-                self.config = json.load(file)
-        except:
+            hostname = socket.gethostname()
+            self.config['ip_address'] = socket.gethostbyname(hostname)
+            self.config['port'] = int(os.getenv("PORT", 5000))
+        except Exception as e:
+            logging.error("Error in PEP - " + e)
             exit()
     
     # Inicia o PEP e dispara uma thread para cada requisição
     def start(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.bind((self.config['ip_address'], self.config['port']))
             sock.listen()
 

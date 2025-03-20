@@ -4,12 +4,27 @@ import json
 import datetime
 
 class PolicyInformationPoint:
+    config = {
+        "dbHost": None,
+        "dbPort": None,
+        "dbDatabase": None,
+        "dbUser": None,
+        "dbPassword": None
+    }
 
     def __init__(self) -> None:
-        with open(os.path.dirname(os.path.abspath(__file__)) + "/config.json") as file:
-            self.config = json.load(file)
-        self.connection = None
-        self.connect()
+        try:
+            self.config['dbHost'] = os.getenv("DBHOST", "localhost")
+            self.config['dbPort'] = int(os.getenv("DBPORT", 5432))
+            self.config['dbDatabase'] = os.getenv("DBDATABASE", "zt-ehealth")
+            self.config['dbUser'] = os.getenv("DBUSER", "admin")
+            self.config['dbPassword'] = os.getenv("DBPASSWORD", "")
+            
+            self.connection = None
+            self.connect()
+        except:
+            exit()
+            
 
     def connect(self) -> None:
         self.connection = psycopg2.connect(
