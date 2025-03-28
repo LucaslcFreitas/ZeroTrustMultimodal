@@ -1,0 +1,145 @@
+name: zero_trust
+services:
+  #BANCO DE DADOS E PGADMIN
+  postgres:
+    build:
+      context: ../database
+    container_name: database
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.5
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=zero@trust.com
+      - PGADMIN_DEFAULT_PASSWORD=ehealth
+    ports:
+      - 80:80
+    volumes:
+      - ./volumes/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.4
+  
+  #RECURSOS
+  resource1:
+    build:
+      context: ../resources
+    container_name: resource1
+    environment:
+      - RESOURCE_NAME=Registro Eletronico de Saude
+      - PORT=7001
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.10
+    ports:
+      - "7001:7001"
+
+  resource2:
+    build:
+      context: ../resources
+    container_name: resource2
+    environment:
+      - RESOURCE_NAME=Sistema de Informacao Hospitalar
+      - PORT=7002
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.11
+    ports:
+      - "7002:7002"
+
+  resource3:
+    build:
+      context: ../resources
+    container_name: resource3
+    environment:
+      - RESOURCE_NAME=Monitoramento Remoto do Paciente
+      - PORT=7003
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.12
+    ports:
+      - "7003:7003"
+
+  resource4:
+    build:
+      context: ../resources
+    container_name: resource4
+    environment:
+      - RESOURCE_NAME=Portal do Paciente
+      - PORT=7004
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.13
+    ports:
+      - "7004:7004"
+
+  resource5:
+    build: 
+      context: ../resources
+    container_name: resource5
+    environment:
+      - RESOURCE_NAME=Telemedicina
+      - PORT=7005
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.14
+    ports:
+      - "7005:7005"
+
+  #ZEROTRUST
+  zerotrust:
+    build: 
+      context: ../zt-architecture
+    container_name: zerotrust
+    environment:
+      - PORT=5000
+      - DBHOST=169.254.0.5
+      - DBPORT=5432
+      - DBDATABASE=zt-ehealth
+      - DBUSER=postgres
+      - DBPASSWORD=zerotrust
+    volumes:
+      - ../zt-architecture:/app
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+      - resource1
+      - resource2
+      - resource3
+      - resource4
+      - resource5
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.2
+
+  #CLIENTES
+  client:
+    build: 
+      context: ../clients
+    container_name: client
+    depends_on:
+      - zerotrust
+    networks:
+      - zero_trust
+    deploy:
+      replicas: 1
+
+
+networks:
+  zero_trust:
+    driver: bridge
+    name: zero_trust
+    ipam:
+      driver: default
+      config:
+        - subnet: 169.254.0.0/16
