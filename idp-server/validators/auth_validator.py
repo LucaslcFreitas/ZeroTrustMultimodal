@@ -1,0 +1,16 @@
+from .base_validator import BaseValidator
+
+class AuthValidator(BaseValidator):
+    REQUIRED_FIELDS = ['registry', 'server_authorization_code', 'device_ioht_cert', 'device_mac', 'device_fp', 'ppg_signal', 'ecg_signal', 'timestamp']
+    
+    def validate(self, data):
+        is_valid, error = super().validate(data)
+        if not is_valid:
+            return False, error
+            
+        # Validações específicas para autenticação
+        # TODO: Verificar quantidade de sinais
+        if len(data['ppg_signal']) < 4 or len(data['ecg_signal']) < 4:
+            return False, "Signals too short"
+            
+        return True, None
