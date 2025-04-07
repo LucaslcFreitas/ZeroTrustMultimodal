@@ -7,7 +7,6 @@ def main():
     
     try:
         server.start()
-        logging.info("IDP server started!")
     except Exception as e:
         logging.error(f"Failed to start server: {str(e)}")
         exit(1)

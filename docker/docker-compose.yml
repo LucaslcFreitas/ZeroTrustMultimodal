@@ -122,6 +122,33 @@ services:
       zero_trust:
         ipv4_address: 169.254.0.2
 
+  # IDP
+  idp:
+    build: 
+      context: ../idp-server
+    container_name: idp
+    environment:
+      - PORT=5001
+      - DBHOST=169.254.0.5
+      - DBPORT=5432
+      - DBDATABASE=zt-ehealth
+      - DBUSER=postgres
+      - DBPASSWORD=zerotrust
+    volumes:
+      - ../idp-server:/app
+    ports:
+      - 5001:5001
+    depends_on:
+      - postgres
+      - resource1
+      - resource2
+      - resource3
+      - resource4
+      - resource5
+    networks:
+      zero_trust:
+        ipv4_address: 169.254.0.3
+
   #CLIENTES
   client:
     build: 

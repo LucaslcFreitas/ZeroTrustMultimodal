@@ -11,12 +11,17 @@ import concurrent.futures
 import logging
 
 class IDPServer:
+    config = {
+        "ip_address": None,
+        "port": None
+    }
     def __init__(self):
         try:
-            with open(os.path.dirname(os.path.abspath(__file__)) + "/config.json") as file:
-                self.config = json.load(file)
+            hostname = socket.gethostname()
+            self.config['ip_address'] = socket.gethostbyname(hostname)
+            self.config['port'] = int(os.getenv("PORT", 5000))
         except Exception as e:
-            logging.error("Failed to load configuration: " + str(e))
+            logging.error("Failed to configure server: " + str(e))
             exit()
 
         self.ssl_context = self._create_ssl_context()
@@ -134,10 +139,12 @@ class IDPServer:
         # Inicia o servidor IDP
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server_socket.bind((self.config['HOST'], self.config['PORT']))
+        server_socket.bind((self.config['ip_address'], self.config['port']))
         server_socket.listen()
 
-        logging.info(f'Waiting for connections at {self.config["HOST"]}:{self.config["PORT"]}')
+        logging.info("IDP server started!")
+
+        # logging.info(f'Waiting for connections at {self.config['ip_address']}:{self.config['port']}')
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
             while True:
