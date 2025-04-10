@@ -100,9 +100,14 @@ class PolicyEnforcementPoint:
                     result = "RESOURCE_NOT_FOUND"
                     conn.sendall(result.encode('utf-8'))
                 case Response.AUTHENTICATION_REQUIRED:
-                    logging.info(f'Authentication required for {addr}')
-                    result = "AUTHENTICATION_REQUIRED"
-                    conn.sendall(result.encode('utf-8'))
+                    if body["idpIp"] and body["idpPort"] and body["authorizationCode"]:
+                        logging.info(f'Redirect login for {addr}')
+                        result = "AUTHENTICATION_REQUIRED\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + body["idpPort"] + "\nAUTHORIZATION_CODE " + body["authorizationCode"]
+                        conn.sendall(result.encode('utf-8'))
+                    else :
+                        logging.error(f'Login error for {addr}')
+                        result = "INTERNAL_SERVER_ERROR"
+                        conn.sendall(result.encode('utf-8'))
                 case Response.REAUTHENTICATION_REQUIRED:
                     if body["idAccess"]:
                         if opReauthentication["inReauthentication"]:
@@ -112,18 +117,18 @@ class PolicyEnforcementPoint:
                         logging.info(f'Reauthentication required for {addr}')   
                         opReauthentication["inReauthentication"] = True
                         opReauthentication["idAccess"] = body["idAccess"]
-                        result = "REAUTHENTICATION_REQUIRED"
+                        result = "REAUTHENTICATION_REQUIRED\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + str(body["idpPort"]) + "\nAUTHORIZATION_CODE " + body["authorizationCode"]
                         conn.sendall(result.encode('utf-8'))
                     else:
                         logging.error(f'Internal server error')
                         result = "INTERNAL_SERVER_ERROR"
                         conn.sendall(result.encode('utf-8'))
                 case Response.REAUTHENTICATION_ALLOWED:
-                    if body["ipAddress"] and body["port"] and body['token']:
+                    if body["ipAddress"] and body["port"]:
                         logging.info(f'Reauthentication allowed for {addr}')
                         sockResource = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                         sockResource.connect((body["ipAddress"], body["port"]))
-                        responseResource = "REAUTHENTICATION_ALLOWED\nTOKEN " + body['token'] + "\nRESPONSE " + sockResource.recv(1024).decode('utf-8')
+                        responseResource = "REAUTHENTICATION_ALLOWED\nRESPONSE " + sockResource.recv(1024).decode('utf-8')
                         conn.sendall(responseResource.encode('utf-8'))
                         sockResource.close()
                         opReauthentication["inReauthentication"] = False
@@ -133,9 +138,9 @@ class PolicyEnforcementPoint:
                         result = "INTERNAL_SERVER_ERROR"
                         conn.sendall(result.encode('utf-8'))
                 case Response.AUTHORIZED_LOGIN:
-                    if body["token"]:
-                        logging.info(f'Authorized login for {addr}')
-                        result = "AUTHORIZED_LOGIN\nTOKEN " + body["token"]
+                    if body["idpIp"] and body["idpPort"] and body["authorizationCode"]:
+                        logging.info(f'Redirect login for {addr}')
+                        result = "AUTHORIZED_LOGIN\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + str(body["idpPort"]) + "\nAUTHORIZATION_CODE " + body["authorizationCode"]
                         conn.sendall(result.encode('utf-8'))
                     else :
                         logging.error(f'Login error for {addr}')
@@ -157,6 +162,10 @@ class PolicyEnforcementPoint:
                 case Response.INTERNAL_SERVER_ERROR:
                     logging.error(f'Internal server error')
                     result = "INTERNAL_SERVER_ERROR"
+                    conn.sendall(result.encode('utf-8'))
+                case Response.ENDPOINT_NOT_IMPLEMENTED:
+                    logging.error(f'Update password is not implemented')
+                    result = "UPDATE_PASSWORD_IS_NOT_IMPLEMENTED"
                     conn.sendall(result.encode('utf-8'))
                 case _: #default
                     result = "INTERNAL_SERVER_ERROR"

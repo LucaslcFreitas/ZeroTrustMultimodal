@@ -2,6 +2,7 @@ from typing import Dict
 from services.auth_service import AuthService
 from services.rate_limiter import RateLimiter
 from services.token_manager import TokenManager
+from services.store_service import StoreService
 from validators.token_validator import TokenValidator
 from validators.auth_validator import AuthValidator
 from validators.reauth_validator import ReauthValidator
@@ -31,7 +32,7 @@ class RequestHandler:
             return {'status': 'error', 'message': error}
         
         # Rate limiting
-        if not self.rate_limiter.check_limit(client_ip, endpoint):
+        if not self.rate_limiter.check_limit(client_ip, endpoint, request_data['timestamp']):
             return {'status': 'error', 'message': 'Too many requests'}
         
         # handler do endpoint
@@ -44,6 +45,7 @@ class RequestHandler:
     def _handle_authenticate(self, request_data: Dict, device_iot_id: str, device_id: str, client_ip: str) -> Dict:
         # Processa autenticação
         result, data = self.auth_service.authenticate(
+            request_data['server_authorization_code'],
             request_data['registry'],
             request_data['ppg_signal'],
             request_data['ecg_signal'],
@@ -64,6 +66,7 @@ class RequestHandler:
     def _handle_reauthenticate(self, request_data: Dict, device_iot_id: str, device_id: str, client_ip: str) -> Dict:
         # Processa reautenticação
         result, data = self.auth_service.reauthenticate(
+            request_data['server_authorization_code'],
             request_data['registry'],
             request_data['ppg_signal'],
             request_data['ecg_signal'],

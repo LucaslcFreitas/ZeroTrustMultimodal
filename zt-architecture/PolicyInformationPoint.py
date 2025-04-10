@@ -17,8 +17,8 @@ class PolicyInformationPoint:
             self.config['dbHost'] = os.getenv("DBHOST", "localhost")
             self.config['dbPort'] = int(os.getenv("DBPORT", 5432))
             self.config['dbDatabase'] = os.getenv("DBDATABASE", "zt-ehealth")
-            self.config['dbUser'] = os.getenv("DBUSER", "admin")
-            self.config['dbPassword'] = os.getenv("DBPASSWORD", "")
+            self.config['dbUser'] = os.getenv("DBUSER", "postgres")
+            self.config['dbPassword'] = os.getenv("DBPASSWORD")
             
             self.connection = None
             self.connect()
@@ -27,13 +27,18 @@ class PolicyInformationPoint:
             
 
     def connect(self) -> None:
-        self.connection = psycopg2.connect(
-            host=self.config["dbHost"],
-            port=self.config["dbPort"],
-            database=self.config["dbDatabase"],
-            user=self.config["dbUser"],
-            password=self.config["dbPassword"]
-        )
+        print(self.config)
+        try:
+            self.connection = psycopg2.connect(
+                host=self.config["dbHost"],
+                port=self.config["dbPort"],
+                database=self.config["dbDatabase"],
+                user=self.config["dbUser"],
+                password=self.config["dbPassword"]
+            )
+        except Exception as e:
+            print(e)
+            exit()
 
     def closeConnection(self) -> None:
         if self.connection:
@@ -196,13 +201,13 @@ class PolicyInformationPoint:
             print(e)
             return False
         
-    def checkLogin(self, cpf, pswToken) -> bool:
+    def checkLogin(self, cpf) -> bool:
         if not self.connection:
             self.connect()
 
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM \"zt-ehealth\".\"Senha\" WHERE senha = '"+pswToken+"' AND \"idUsuario\" = (SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+cpf+"') AND status = 'Ativo'")
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+cpf+"'")
                 result = cursor.fetchone()
                 if result:
                     return True
@@ -211,21 +216,19 @@ class PolicyInformationPoint:
             print(e)
             return False
     
-    def registerLoginAndToken(self, cpf, pswToken, date, result, userToken, validity) -> bool:
+    def registerLoginAndToken(self, cpf, date, idDevice, authorizationCode) -> bool:
         if not self.connection:
             self.connect()
 
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("INSERT INTO \"zt-ehealth\".\"RegLogin\"(\"idUsuario\", data, resultado, \"idSenha\") VALUES ((SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+cpf+"'), '"+date+"', '"+result+"', (SELECT id FROM \"zt-ehealth\".\"Senha\" WHERE senha = '"+pswToken+"' AND status = 'Ativo' AND \"idUsuario\" = (SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+cpf+"'))) RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"RegLogin\"(\"idUsuario\", data, \"idDispositivo\", completado, \"codigoAutorizacao\") VALUES ((SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+cpf+"'), '"+date+"', '"+str(idDevice)+"', 'false', '"+authorizationCode+"') RETURNING id")
                 regLoginId = cursor.fetchone()[0]
 
-                if regLoginId and result == 'Permitido':
-                    cursor.execute("UPDATE \"zt-ehealth\".\"Token\" SET status='Inativo' WHERE \"idUsuario\" = (SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+cpf+"') AND status = 'Ativo'")
-                    cursor.execute("INSERT INTO \"zt-ehealth\".\"Token\"(\"idUsuario\", \"idRegLogin\", hash, validade, status) VALUES ((SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+cpf+"'), "+str(regLoginId)+", '"+userToken+"', '"+str(validity)+"', 'Ativo')")
-                    self.connection.commit()
-                    return True
                 self.connection.commit()
+                
+                if regLoginId :
+                    return True
                 return False
         except Exception as e:
             print(e)
@@ -453,6 +456,21 @@ class PolicyInformationPoint:
                 result = cursor.fetchone()
                 if result:
                     return result
+                return None
+        except Exception as e:
+            print(e)
+            return None
+        
+    def getDeviceIdByMAC(self, MAC):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"Dispositivo\"")
+                result = cursor.fetchone()
+                if result:
+                    return result[0]
                 return None
         except Exception as e:
             print(e)

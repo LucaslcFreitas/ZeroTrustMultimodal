@@ -1,11 +1,13 @@
 import random
 from validators.signal_validator import SignalValidator
 from .token_manager import TokenManager
+from services.store_service import StoreService
 
 class AuthService:
-    def __init__(self, token_manager: TokenManager, signal_validator: SignalValidator):
+    def __init__(self, token_manager: TokenManager, signal_validator: SignalValidator, store_service: StoreService):
         self.token_manager = token_manager
         self.signal_validator = signal_validator
+        self.store_service = store_service
 
         #Fake accuracy
         self.base_accuracy = {
@@ -13,9 +15,15 @@ class AuthService:
             'ecg': 0.92
         }
 
-    def authenticate(self, registry: str, ppg_signal: list, ecg_signal: list, timestamp: str, device_iot_id: str, device_id: str, client_ip: str):
+    def authenticate(self, authorization_code: str, registry: str, ppg_signal: list, ecg_signal: list, timestamp: str, device_iot_id: str, device_id: str, client_ip: str):
         # Buscar user id no bd
-        user_id = registry
+        user_id = self.store_service.getUserIdByRegistry(registry)
+        if not user_id:
+            return False, {'status': 'error', 'message': 'Unidentified user'}
+
+        idRegLogin = self.store_service.validityRegLoginByAuthorizationCode(user_id, authorization_code)
+        if not idRegLogin:
+            return False, {'status': 'error', 'message': 'Invalid authorization code'}
 
         # Validação dos sinais biométricos
         validation_result = self.signal_validator.validate_signals(ppg_signal, ecg_signal)
@@ -24,14 +32,17 @@ class AuthService:
 
         # Simulação de autenticação biométrica (substituir por CNN)
         auth_result = self._biometric_auth(user_id, ppg_signal, ecg_signal)
+
+        # Store result authentication
+        self.store_service.updateRegLogin(idRegLogin, auth_result['authenticated'], authorization_code, auth_result['accuracy']['ppg'], auth_result['accuracy']['ppg'])
         
         if not auth_result['authenticated']:
             return False, {"error": "Biometric authentication failed", "accuracy": auth_result['accuracy']}
+ 
 
         # Geração de tokens
-        token = self.token_manager.generate_token(user_id, device_id)
+        token = self.token_manager.generate_token(idRegLogin, user_id, device_id)
 
-        # TODO: Armazenar resultado no bd
         
         return True, {
             "token": token,
@@ -39,9 +50,15 @@ class AuthService:
             "signal_quality": validation_result
         }
     
-    def reauthenticate(self, registry: str, ppg_signal: list, ecg_signal: list, timestamp: str, device_iot_id: str, device_id: str, client_ip: str):
+    def reauthenticate(self, authorization_code: str, registry: str, ppg_signal: list, ecg_signal: list, timestamp: str, device_iot_id: str, device_id: str, client_ip: str):
         # Buscar user id no bd
-        user_id = registry
+        user_id = self.store_service.getUserIdByRegistry(registry)
+        if not user_id:
+            return False, {'status': 'error', 'message': 'Unidentified user'}
+
+        idRegLogin = self.store_service.validityRegLoginByAuthorizationCode(user_id, authorization_code)
+        if not idRegLogin:
+            return False, {'status': 'error', 'message': 'Invalid authorization code'}
 
         # Validação dos sinais biométricos
         validation_result = self.signal_validator.validate_signals(ppg_signal, ecg_signal)
@@ -50,16 +67,15 @@ class AuthService:
 
         # Simulação de autenticação biométrica (substituir por CNN)
         auth_result = self._biometric_auth(user_id, ppg_signal, ecg_signal)
+
+        # Store result authentication
+        self.store_service.updateRegLogin(idRegLogin, auth_result['authenticated'], authorization_code, auth_result['accuracy']['ppg'], auth_result['accuracy']['ppg'])
         
         if not auth_result['authenticated']:
             return False, {"error": "Biometric authentication failed", "accuracy": auth_result['accuracy']}
         
-        # TODO: Invalidar token, caso tenho algum ativo
-        
         # Geração de tokens
-        token = self.token_manager.generate_token(user_id, device_id)
-
-        # TODO: Armazenar resultado no bd
+        token = self.token_manager.generate_token(idRegLogin, user_id, device_id)
         
         return True, {
             "token": token,

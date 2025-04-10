@@ -5,6 +5,7 @@ from services.auth_service import AuthService
 from services.rate_limiter import RateLimiter
 from services.token_manager import TokenManager
 from core.request_handler import RequestHandler
+from services.store_service import StoreService
 import os
 from validators.signal_validator import SignalValidator
 import concurrent.futures
@@ -19,20 +20,23 @@ class IDPServer:
         try:
             hostname = socket.gethostname()
             self.config['ip_address'] = socket.gethostbyname(hostname)
-            self.config['port'] = int(os.getenv("PORT", 5000))
+            self.config['port'] = int(os.getenv("PORT", 5001))
         except Exception as e:
             logging.error("Failed to configure server: " + str(e))
             exit()
 
         self.ssl_context = self._create_ssl_context()
+
+        # Inicializa o store
+        self.store_service= StoreService()
         
         # Inicializa componentes
-        self.token_manager = TokenManager()
+        self.token_manager = TokenManager(self.store_service)
         self.rate_limiter = RateLimiter()
         
         # Inicializa serviços
         signal_validator = SignalValidator()
-        self.auth_service = AuthService(self.token_manager, signal_validator)
+        self.auth_service = AuthService(self.token_manager, signal_validator, self.store_service)
 
         # Carrega modelo CNN treinada
         
@@ -74,7 +78,8 @@ class IDPServer:
                 return
             
             # Validação dos dispositivo utilizado
-            device_id = "device1" # self._check_device(request_data)
+            # TODO: Validar dispositivo
+            device_id = self.store_service.getDeviceIdByCode(server_authorization_code)
             if not device_id:
                 secure_socket.send(json.dumps({
                     'status': 'error',

@@ -26,7 +26,7 @@ def startAccess():
 
         message = json.dumps({
             'endpoint': 'authenticate',
-            'registry': 'teste',
+            'registry': '460.395.930-32',
             'server_authorization_code': '1234',
             'device_ioht_cert': '1234',
             'device_mac': '123',

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 
 class RateLimiter:
@@ -10,11 +10,10 @@ class RateLimiter:
             'logout': (10, timedelta(hours=1))
         }
 
-    def check_limit(self, client_id: str, endpoint: str):
+    def check_limit(self, client_id: str, endpoint: str, time: str):
         limit, time_window = self.limits.get(endpoint)
 
-        # Ajustar data atual com sincronizador
-        now = datetime.now()
+        now = datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone(timedelta(hours=-3)))
         
         self.request_log[client_id] = [
             req_time for req_time in self.request_log[client_id]

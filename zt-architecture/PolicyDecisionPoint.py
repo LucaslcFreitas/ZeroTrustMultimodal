@@ -28,18 +28,19 @@ class PolicyDecisionPoint:
         
         match(data['TYPE']):
             case TypeRequest.LOGIN:
-                if (data['REGISTRY'] and data['PASSWORD'] and data['IP_ADDRESS'] and data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME']):
-                    return self.__login(data['REGISTRY'], data['PASSWORD'], data['TIME'])
+                if (data['REGISTRY'] and data['IP_ADDRESS'] and data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME']):
+                    return self.__login(data['REGISTRY'], data['TIME'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'])
             case TypeRequest.ACCESS:
                 if (data['RESOURCE'] and data['SUB_RESOURCE'] and data['TYPE_ACTION'] and data['TOKEN'] and data['IP_ADDRESS'] and data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME']):
+                    if not data['TOKEN']:
+                        return Response.AUTHENTICATION_REQUIRED, self.__redirectLogin(data['REGISTRY'], data['TIME'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'])
                     return self.policyEngine(data)
                 return Response.ACCESS_DENIED, None
             case TypeRequest.UPDATE_PASSWORD:
-                if (data['TOKEN'] and data['OLD_PASSWORD'] and data['NEW_PASSWORD'] and data['IP_ADDRESS'], data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME']):
-                    return self.__updatePassword(data['TOKEN'], data['OLD_PASSWORD'], data['NEW_PASSWORD'], data['TIME'])
+                return Response.ENDPOINT_NOT_IMPLEMENTED, None
             case TypeRequest.REAUTHENTICATION:
-                if (data['TOKEN'] and data['REGISTRY'] and data['PASSWORD'] and data['IP_ADDRESS'] and data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME'] and data['ID_ACCESS']):
-                    return self.__reauthenticate(data['TOKEN'], data['REGISTRY'], data['PASSWORD'], data['TIME'], data['ID_ACCESS'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'], data['IP_ADDRESS'], data['LATITUDE'], data['LONGITUDE'])
+                if (data['TOKEN'] and data['REGISTRY'] and data['IP_ADDRESS'] and data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME'] and data['ID_ACCESS']):
+                    return self.__afterReauthentication(data['TOKEN'], data['REGISTRY'], data['TIME'], data['ID_ACCESS'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'], data['IP_ADDRESS'], data['LATITUDE'], data['LONGITUDE'])
             case _: # Default
                 return Response.ACCESS_DENIED, None
 
@@ -47,7 +48,7 @@ class PolicyDecisionPoint:
         # Verifica se o usuário está devidamente autenticado
         if not self.__checkUserCredentials(data['TOKEN'], data['TIME']):
             #registrar acesso negado...
-            return Response.AUTHENTICATION_REQUIRED, None
+            return Response.AUTHENTICATION_REQUIRED, self.__redirectLogin(data['REGISTRY'], data['TIME'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'])
 
         # Pega as credênciais do usuário
         user = self.pip.getUserAttributes(data['TOKEN'])
@@ -108,7 +109,8 @@ class PolicyDecisionPoint:
                 if idDeviceTMP:
                     idAccess =  self.pip.registerAccessDeniedOrReauthenticated(user['registry'], data['TOKEN'], data['LATITUDE'], data['LONGITUDE'], data['TIME'], data['IP_ADDRESS'], "Reautenticacao", trust, data['RESOURCE'], data['SUB_RESOURCE'], data['TYPE_ACTION'], idDeviceTMP)
                     if idAccess:
-                        return result, {"idAccess": idAccess}
+                        redirectData = self.__redirectLogin(user['registry'], data['TIME'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'])
+                        return result, {"idAccess": idAccess, "idpIp": redirectData["idpIp"], "idpPort": redirectData["idpPort"], "authorizationCode": redirectData["authorizationCode"]}
                 return Response.INTERNAL_SERVER_ERROR, None
             case Response.ACCESS_DENIED:
                 idDeviceTMP = self.__registerDeviceForAccessDeniedOrReauthenticated(data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'], data['TIME'])
@@ -125,42 +127,38 @@ class PolicyDecisionPoint:
                 return Response.INTERNAL_SERVER_ERROR, None
         
         return Response.INTERNAL_SERVER_ERROR, None
+    
+    def __login(self, registry, date, MAC, DFP, OS, versionOs):
+        redirectData = self.__redirectLogin(registry, date, MAC, DFP, OS, versionOs)
+        if redirectData:
+            return Response.AUTHORIZED_LOGIN, redirectData
+        return Response.ACCESS_DENIED, None
 
     # Realiza login do usuário
-    def __login(self, registry, password, date) -> str:
-        pswToken = hashlib.sha256(str(password).encode('utf-8')).hexdigest()
-        auxUserToken = registry + password + str(datetime.datetime.now()) + str(random.randint(1, 100000))
-        userToken = hashlib.sha256(str(auxUserToken).encode('utf-8')).hexdigest()
-        validity = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f") + datetime.timedelta(hours=3)
-        result = 'Negado'
+    def __redirectLogin(self, registry, date, MAC, DFP, OS, versionOS) -> str:
+        idDevice = self.pip.getDeviceIdByMAC(MAC)
+        if not idDevice:
+            self.pip.registerDevice(MAC, DFP, OS, versionOS, date)
+            idDevice = self.pip.getDeviceIdByMAC(MAC)
 
-        if self.pip.checkLogin(registry, pswToken):
-            result = 'Permitido'
+        auxAuthorization = registry + str(datetime.datetime.now()) + str(random.randint(1, 100000))
+        authorizationCode = hashlib.sha256(str(auxAuthorization).encode('utf-8')).hexdigest()
+        # validity = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f") + datetime.timedelta(hours=3)
 
-        self.pip.registerLoginAndToken(registry, pswToken, date, result, userToken, validity)
-        if result == 'Permitido':
-            return Response.AUTHORIZED_LOGIN, {"token": userToken}
-        return Response.ACCESS_DENIED, None
-    
-    # Realiza autalização de senha do usuário
-    def __updatePassword(self, token, oldPsw, newPsw, date):
-        oldPswToken = hashlib.sha256(str(oldPsw).encode('utf-8')).hexdigest()
-        if self.__checkUserCredentials(token, date):
-            user = self.pip.getUserAttributes(token)
-            newPswToken = hashlib.sha256(str(newPsw).encode('utf-8')).hexdigest()
-            auxUserToken = user["registry"] + newPsw + str(datetime.datetime.now()) + str(random.randint(1, 100000))
-            newUserToken = hashlib.sha256(str(auxUserToken).encode('utf-8')).hexdigest()
-            validity = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f") + datetime.timedelta(hours=3)
-            if self.pip.checkPasswordValidity(user["registry"], oldPswToken):
-                if self.pip.updatePassword(user["registry"], newPswToken, date):
-                    if self.pip.registerLoginAndToken(user["registry"], newPswToken, date, 'Permitido', newUserToken, validity):
-                        return Response.UPDATED_PASSWORD, {"token": newUserToken}
-            else:
-                self.pip.registerLoginAndToken(user["registry"], newPswToken, date, 'Negado', newUserToken, validity)
-        return Response.UNAUTHORIZED_PASSWORD_UPDATE, None
+        idpServer = {
+            # "idpIp": '192.168.56.1',
+            "idpIp": '169.254.0.3', 
+            "idpPort": 5001,
+            "authorizationCode": authorizationCode
+        }
+
+        if self.pip.checkLogin(registry):
+            self.pip.registerLoginAndToken(registry, date, idDevice, authorizationCode)
+            return idpServer
+        return None
 
     # Realiza reautenticação do usuário
-    def __reauthenticate(self, token, registry, password, date, idAccess, MAC, dfp,os, versionOs, ip, latitude, longitude):
+    def __afterReauthentication(self, token, registry, date, idAccess, MAC, dfp,os, versionOs, ip, latitude, longitude):
         if  self.__checkUserCredentials(token, date):
             access = self.pip.getAccessById(idAccess)
 
@@ -178,19 +176,13 @@ class PolicyDecisionPoint:
             if diferenceTime > datetime.timedelta(minutes=5):
                 return Response.ACCESS_DENIED, None
 
-            resp, body = self.__login(registry, password, date)
-            if resp == Response.AUTHORIZED_LOGIN and body["token"]:
-                resource = self.pip.getResourceSocketBySubResourceId(access[4])
-                if resource:
-                    self.__registerOrUpdateDevice(MAC, dfp, os, versionOs, date)
-                    newAccess =  self.pip.registerAccessAllowedForReauthenticate(access[1], body["token"], access[3], access[4], access[5], MAC, access[7], access[8], date, "Permitido", ip, access[12])
-                    if newAccess:
-                        resp = {
-                        'ipAddress': resource['ipAddress'],
-                        'port': resource['port'],
-                        'token': body['token']
-                    }
-                        return Response.REAUTHENTICATION_ALLOWED, resp
+            
+            resource = self.pip.getResourceSocketBySubResourceId(access[4])
+            if resource:
+                self.__registerOrUpdateDevice(MAC, dfp, os, versionOs, date)
+                newAccess =  self.pip.registerAccessAllowedForReauthenticate(access[1], token, access[3], access[4], access[5], MAC, access[7], access[8], date, "Permitido", ip, access[12])
+                if newAccess:
+                    return Response.REAUTHENTICATION_ALLOWED, resource
         return Response.ACCESS_DENIED, None
     
     # Registra negação de acesso por falta de reautenticação
@@ -226,16 +218,16 @@ class PolicyDecisionPoint:
         
 
         # Avalia troca de senhas recentes
-        recentPasswordChanges = self.pip.getUserPasswordHistory(registry, date)
-        countPasswordChanges = 0
-        if recentPasswordChanges:
-            countPasswordChanges = len(recentPasswordChanges)
-        if countPasswordChanges >= 1 and countPasswordChanges < 3:
-            trust -= 10
-        elif countPasswordChanges >= 3 and countPasswordChanges < 6:
-            trust -= 20
-        elif countPasswordChanges >= 6:
-            trust -= 30
+        # recentPasswordChanges = self.pip.getUserPasswordHistory(registry, date)
+        # countPasswordChanges = 0
+        # if recentPasswordChanges:
+        #     countPasswordChanges = len(recentPasswordChanges)
+        # if countPasswordChanges >= 1 and countPasswordChanges < 3:
+        #     trust -= 10
+        # elif countPasswordChanges >= 3 and countPasswordChanges < 6:
+        #     trust -= 20
+        # elif countPasswordChanges >= 6:
+        #     trust -= 30
         
         # Avalia mudanca consideravel na localizacao recente
         recentLocations = self.pip.getRecentLocationAccessUser(registry, date) # Avaliação com base nos acessos recentes, para detectar mudanças bruscas na localização
