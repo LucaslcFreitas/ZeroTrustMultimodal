@@ -4,6 +4,6 @@ import re
 class TokenValidator(BaseValidator):
     
     def validate(self, token_data: dict):
-        # TODO: Implementar e validar validação do token
+        # Fazer e implementar ea validação do token
             
         return True, None

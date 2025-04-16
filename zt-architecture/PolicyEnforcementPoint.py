@@ -137,6 +137,15 @@ class PolicyEnforcementPoint:
                         logging.error(f'Internal server error')
                         result = "INTERNAL_SERVER_ERROR"
                         conn.sendall(result.encode('utf-8'))
+                case Response.AUTHORIZED_REGISTRY:
+                    if body["idpIp"] and body["idpPort"] and body["registryCode"]:
+                        logging.info(f'Redirect registry for {addr}')
+                        result = "AUTHORIZED_REGISTRY\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + str(body["idpPort"]) + "\nREGISTRY_CODE " + body["registryCode"]
+                        conn.sendall(result.encode('utf-8'))
+                    else :
+                        logging.error(f'Registry error for {addr}')
+                        result = "INTERNAL_SERVER_ERROR"
+                        conn.sendall(result.encode('utf-8'))
                 case Response.AUTHORIZED_LOGIN:
                     if body["idpIp"] and body["idpPort"] and body["authorizationCode"]:
                         logging.info(f'Redirect login for {addr}')
@@ -158,6 +167,10 @@ class PolicyEnforcementPoint:
                 case Response.UNAUTHORIZED_PASSWORD_UPDATE:
                     logging.info(f'Unauthorized password update for {addr}')
                     result = "UNAUTHORIZED_PASSWORD_UPDATE"
+                    conn.sendall(result.encode('utf-8'))
+                case Response.UNAUTHORIZED_REGISTRY:
+                    logging.info(f'Unauthorized registry for {addr}')
+                    result = "UNAUTHORIZED_REGISTRY"
                     conn.sendall(result.encode('utf-8'))
                 case Response.INTERNAL_SERVER_ERROR:
                     logging.error(f'Internal server error')

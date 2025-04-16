@@ -2,14 +2,15 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.4
--- Dumped by pg_dump version 16.4
+-- Dumped from database version 16.1
+-- Dumped by pg_dump version 16.8
 
--- Started on 2025-03-11 11:20:25
+-- Started on 2025-04-16 21:35:50 UTC
 
 
 ALTER DATABASE "zt-ehealth" OWNER TO postgres;
 
+\encoding SQL_ASCII
 \connect -reuse-previous=on "dbname='zt-ehealth'"
 
 SET statement_timeout = 0;
@@ -24,7 +25,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 6 (class 2615 OID 16398)
+-- TOC entry 6 (class 2615 OID 24576)
 -- Name: zt-ehealth; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -38,7 +39,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 216 (class 1259 OID 16399)
+-- TOC entry 216 (class 1259 OID 24577)
 -- Name: Acesso; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -64,7 +65,7 @@ CREATE TABLE "zt-ehealth"."Acesso" (
 ALTER TABLE "zt-ehealth"."Acesso" OWNER TO postgres;
 
 --
--- TOC entry 217 (class 1259 OID 16403)
+-- TOC entry 217 (class 1259 OID 24581)
 -- Name: Acesso_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -80,7 +81,7 @@ CREATE SEQUENCE "zt-ehealth"."Acesso_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Acesso_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5046 (class 0 OID 0)
+-- TOC entry 3549 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: Acesso_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -89,7 +90,7 @@ ALTER SEQUENCE "zt-ehealth"."Acesso_id_seq" OWNED BY "zt-ehealth"."Acesso".id;
 
 
 --
--- TOC entry 218 (class 1259 OID 16404)
+-- TOC entry 218 (class 1259 OID 24582)
 -- Name: CaracteristicaDispositivo; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -107,7 +108,7 @@ CREATE TABLE "zt-ehealth"."CaracteristicaDispositivo" (
 ALTER TABLE "zt-ehealth"."CaracteristicaDispositivo" OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 16409)
+-- TOC entry 219 (class 1259 OID 24587)
 -- Name: CaracteristicaDispositivo_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -123,7 +124,7 @@ CREATE SEQUENCE "zt-ehealth"."CaracteristicaDispositivo_id_seq"
 ALTER SEQUENCE "zt-ehealth"."CaracteristicaDispositivo_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5047 (class 0 OID 0)
+-- TOC entry 3550 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: CaracteristicaDispositivo_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -132,7 +133,7 @@ ALTER SEQUENCE "zt-ehealth"."CaracteristicaDispositivo_id_seq" OWNED BY "zt-ehea
 
 
 --
--- TOC entry 220 (class 1259 OID 16410)
+-- TOC entry 220 (class 1259 OID 24588)
 -- Name: Cliente; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -145,7 +146,7 @@ CREATE TABLE "zt-ehealth"."Cliente" (
 ALTER TABLE "zt-ehealth"."Cliente" OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 16413)
+-- TOC entry 221 (class 1259 OID 24591)
 -- Name: Dispositivo; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -158,7 +159,7 @@ CREATE TABLE "zt-ehealth"."Dispositivo" (
 ALTER TABLE "zt-ehealth"."Dispositivo" OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 16416)
+-- TOC entry 222 (class 1259 OID 24594)
 -- Name: DispositivoTMP; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -175,7 +176,7 @@ CREATE TABLE "zt-ehealth"."DispositivoTMP" (
 ALTER TABLE "zt-ehealth"."DispositivoTMP" OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 16421)
+-- TOC entry 223 (class 1259 OID 24599)
 -- Name: DispositivoTMP_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -191,7 +192,7 @@ CREATE SEQUENCE "zt-ehealth"."DispositivoTMP_id_seq"
 ALTER SEQUENCE "zt-ehealth"."DispositivoTMP_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5048 (class 0 OID 0)
+-- TOC entry 3551 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: DispositivoTMP_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -200,7 +201,7 @@ ALTER SEQUENCE "zt-ehealth"."DispositivoTMP_id_seq" OWNED BY "zt-ehealth"."Dispo
 
 
 --
--- TOC entry 224 (class 1259 OID 16422)
+-- TOC entry 224 (class 1259 OID 24600)
 -- Name: Dispositivo_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -216,7 +217,7 @@ CREATE SEQUENCE "zt-ehealth"."Dispositivo_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Dispositivo_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5049 (class 0 OID 0)
+-- TOC entry 3552 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: Dispositivo_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -225,7 +226,7 @@ ALTER SEQUENCE "zt-ehealth"."Dispositivo_id_seq" OWNED BY "zt-ehealth"."Disposit
 
 
 --
--- TOC entry 225 (class 1259 OID 16423)
+-- TOC entry 225 (class 1259 OID 24601)
 -- Name: Paciente_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -241,7 +242,7 @@ CREATE SEQUENCE "zt-ehealth"."Paciente_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Paciente_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5050 (class 0 OID 0)
+-- TOC entry 3553 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: Paciente_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -250,7 +251,7 @@ ALTER SEQUENCE "zt-ehealth"."Paciente_id_seq" OWNED BY "zt-ehealth"."Cliente".id
 
 
 --
--- TOC entry 226 (class 1259 OID 16424)
+-- TOC entry 226 (class 1259 OID 24602)
 -- Name: Permissao; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -269,7 +270,7 @@ CREATE TABLE "zt-ehealth"."Permissao" (
 ALTER TABLE "zt-ehealth"."Permissao" OWNER TO postgres;
 
 --
--- TOC entry 227 (class 1259 OID 16427)
+-- TOC entry 227 (class 1259 OID 24605)
 -- Name: Permissao_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -285,7 +286,7 @@ CREATE SEQUENCE "zt-ehealth"."Permissao_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Permissao_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5051 (class 0 OID 0)
+-- TOC entry 3554 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: Permissao_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -294,7 +295,7 @@ ALTER SEQUENCE "zt-ehealth"."Permissao_id_seq" OWNED BY "zt-ehealth"."Permissao"
 
 
 --
--- TOC entry 228 (class 1259 OID 16428)
+-- TOC entry 228 (class 1259 OID 24606)
 -- Name: Profissional; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -311,7 +312,7 @@ CREATE TABLE "zt-ehealth"."Profissional" (
 ALTER TABLE "zt-ehealth"."Profissional" OWNER TO postgres;
 
 --
--- TOC entry 229 (class 1259 OID 16431)
+-- TOC entry 229 (class 1259 OID 24609)
 -- Name: Profissional_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -327,7 +328,7 @@ CREATE SEQUENCE "zt-ehealth"."Profissional_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Profissional_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5052 (class 0 OID 0)
+-- TOC entry 3555 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: Profissional_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -336,7 +337,7 @@ ALTER SEQUENCE "zt-ehealth"."Profissional_id_seq" OWNED BY "zt-ehealth"."Profiss
 
 
 --
--- TOC entry 230 (class 1259 OID 16432)
+-- TOC entry 230 (class 1259 OID 24610)
 -- Name: Recurso; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -351,7 +352,7 @@ CREATE TABLE "zt-ehealth"."Recurso" (
 ALTER TABLE "zt-ehealth"."Recurso" OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 16435)
+-- TOC entry 231 (class 1259 OID 24613)
 -- Name: Recurso_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -367,7 +368,7 @@ CREATE SEQUENCE "zt-ehealth"."Recurso_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Recurso_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5053 (class 0 OID 0)
+-- TOC entry 3556 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: Recurso_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -376,7 +377,7 @@ ALTER SEQUENCE "zt-ehealth"."Recurso_id_seq" OWNED BY "zt-ehealth"."Recurso".id;
 
 
 --
--- TOC entry 232 (class 1259 OID 16436)
+-- TOC entry 232 (class 1259 OID 24614)
 -- Name: RegLogin; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -384,17 +385,19 @@ CREATE TABLE "zt-ehealth"."RegLogin" (
     id integer NOT NULL,
     "idUsuario" integer,
     data timestamp with time zone NOT NULL,
-    resultado character varying(10) NOT NULL,
-    "idSenha" integer,
+    resultado character varying(10),
     "idDispositivo" integer,
-    tipo character varying(15)
+    completado boolean DEFAULT false NOT NULL,
+    "codigoAutorizacao" character varying(256) NOT NULL,
+    "scorePPG" real,
+    "scoreECG" real
 );
 
 
 ALTER TABLE "zt-ehealth"."RegLogin" OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1259 OID 16439)
+-- TOC entry 233 (class 1259 OID 24618)
 -- Name: RegLogin_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -410,7 +413,7 @@ CREATE SEQUENCE "zt-ehealth"."RegLogin_id_seq"
 ALTER SEQUENCE "zt-ehealth"."RegLogin_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5054 (class 0 OID 0)
+-- TOC entry 3557 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: RegLogin_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
@@ -419,48 +422,7 @@ ALTER SEQUENCE "zt-ehealth"."RegLogin_id_seq" OWNED BY "zt-ehealth"."RegLogin".i
 
 
 --
--- TOC entry 234 (class 1259 OID 16440)
--- Name: Senha; Type: TABLE; Schema: zt-ehealth; Owner: postgres
---
-
-CREATE TABLE "zt-ehealth"."Senha" (
-    id integer NOT NULL,
-    "idUsuario" integer NOT NULL,
-    senha character varying(256) NOT NULL,
-    "dataCriacao" timestamp with time zone NOT NULL,
-    status character varying(12) NOT NULL
-);
-
-
-ALTER TABLE "zt-ehealth"."Senha" OWNER TO postgres;
-
---
--- TOC entry 235 (class 1259 OID 16443)
--- Name: Senha_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
---
-
-CREATE SEQUENCE "zt-ehealth"."Senha_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE "zt-ehealth"."Senha_id_seq" OWNER TO postgres;
-
---
--- TOC entry 5055 (class 0 OID 0)
--- Dependencies: 235
--- Name: Senha_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
---
-
-ALTER SEQUENCE "zt-ehealth"."Senha_id_seq" OWNED BY "zt-ehealth"."Senha".id;
-
-
---
--- TOC entry 236 (class 1259 OID 16444)
+-- TOC entry 234 (class 1259 OID 24619)
 -- Name: SensibilidadeSubRecurso; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -475,7 +437,7 @@ CREATE TABLE "zt-ehealth"."SensibilidadeSubRecurso" (
 ALTER TABLE "zt-ehealth"."SensibilidadeSubRecurso" OWNER TO postgres;
 
 --
--- TOC entry 237 (class 1259 OID 16447)
+-- TOC entry 235 (class 1259 OID 24622)
 -- Name: SensibilidadeSubRecurso_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -491,8 +453,8 @@ CREATE SEQUENCE "zt-ehealth"."SensibilidadeSubRecurso_id_seq"
 ALTER SEQUENCE "zt-ehealth"."SensibilidadeSubRecurso_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5056 (class 0 OID 0)
--- Dependencies: 237
+-- TOC entry 3558 (class 0 OID 0)
+-- Dependencies: 235
 -- Name: SensibilidadeSubRecurso_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -500,7 +462,7 @@ ALTER SEQUENCE "zt-ehealth"."SensibilidadeSubRecurso_id_seq" OWNED BY "zt-ehealt
 
 
 --
--- TOC entry 238 (class 1259 OID 16448)
+-- TOC entry 236 (class 1259 OID 24623)
 -- Name: SubRecurso; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -514,7 +476,7 @@ CREATE TABLE "zt-ehealth"."SubRecurso" (
 ALTER TABLE "zt-ehealth"."SubRecurso" OWNER TO postgres;
 
 --
--- TOC entry 239 (class 1259 OID 16451)
+-- TOC entry 237 (class 1259 OID 24626)
 -- Name: SubRecurso_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -530,8 +492,8 @@ CREATE SEQUENCE "zt-ehealth"."SubRecurso_id_seq"
 ALTER SEQUENCE "zt-ehealth"."SubRecurso_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5057 (class 0 OID 0)
--- Dependencies: 239
+-- TOC entry 3559 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: SubRecurso_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -539,7 +501,7 @@ ALTER SEQUENCE "zt-ehealth"."SubRecurso_id_seq" OWNED BY "zt-ehealth"."SubRecurs
 
 
 --
--- TOC entry 240 (class 1259 OID 16452)
+-- TOC entry 238 (class 1259 OID 24627)
 -- Name: Token; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -558,7 +520,7 @@ CREATE TABLE "zt-ehealth"."Token" (
 ALTER TABLE "zt-ehealth"."Token" OWNER TO postgres;
 
 --
--- TOC entry 241 (class 1259 OID 16455)
+-- TOC entry 239 (class 1259 OID 24630)
 -- Name: Token_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -574,8 +536,8 @@ CREATE SEQUENCE "zt-ehealth"."Token_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Token_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5058 (class 0 OID 0)
--- Dependencies: 241
+-- TOC entry 3560 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: Token_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -583,7 +545,7 @@ ALTER SEQUENCE "zt-ehealth"."Token_id_seq" OWNED BY "zt-ehealth"."Token".id;
 
 
 --
--- TOC entry 242 (class 1259 OID 16456)
+-- TOC entry 240 (class 1259 OID 24631)
 -- Name: Usuario; Type: TABLE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -591,14 +553,17 @@ CREATE TABLE "zt-ehealth"."Usuario" (
     id integer NOT NULL,
     nome character varying(150) NOT NULL,
     tipo character varying(15) NOT NULL,
-    cpf character varying(15) NOT NULL
+    cpf character varying(15) NOT NULL,
+    "codigoCriacao" character varying(256) NOT NULL,
+    ativado boolean DEFAULT false NOT NULL,
+    "dataCriacao" timestamp with time zone NOT NULL
 );
 
 
 ALTER TABLE "zt-ehealth"."Usuario" OWNER TO postgres;
 
 --
--- TOC entry 243 (class 1259 OID 16459)
+-- TOC entry 241 (class 1259 OID 24635)
 -- Name: Usuario_id_seq; Type: SEQUENCE; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -614,8 +579,8 @@ CREATE SEQUENCE "zt-ehealth"."Usuario_id_seq"
 ALTER SEQUENCE "zt-ehealth"."Usuario_id_seq" OWNER TO postgres;
 
 --
--- TOC entry 5059 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3561 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: Usuario_id_seq; Type: SEQUENCE OWNED BY; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -623,7 +588,7 @@ ALTER SEQUENCE "zt-ehealth"."Usuario_id_seq" OWNED BY "zt-ehealth"."Usuario".id;
 
 
 --
--- TOC entry 4801 (class 2604 OID 16460)
+-- TOC entry 3307 (class 2604 OID 24636)
 -- Name: Acesso id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -631,7 +596,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso" ALTER COLUMN id SET DEFAULT nextval('"zt-
 
 
 --
--- TOC entry 4803 (class 2604 OID 16461)
+-- TOC entry 3309 (class 2604 OID 24637)
 -- Name: CaracteristicaDispositivo id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -639,7 +604,7 @@ ALTER TABLE ONLY "zt-ehealth"."CaracteristicaDispositivo" ALTER COLUMN id SET DE
 
 
 --
--- TOC entry 4804 (class 2604 OID 16462)
+-- TOC entry 3310 (class 2604 OID 24638)
 -- Name: Cliente id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -647,7 +612,7 @@ ALTER TABLE ONLY "zt-ehealth"."Cliente" ALTER COLUMN id SET DEFAULT nextval('"zt
 
 
 --
--- TOC entry 4805 (class 2604 OID 16463)
+-- TOC entry 3311 (class 2604 OID 24639)
 -- Name: Dispositivo id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -655,7 +620,7 @@ ALTER TABLE ONLY "zt-ehealth"."Dispositivo" ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- TOC entry 4806 (class 2604 OID 16464)
+-- TOC entry 3312 (class 2604 OID 24640)
 -- Name: DispositivoTMP id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -663,7 +628,7 @@ ALTER TABLE ONLY "zt-ehealth"."DispositivoTMP" ALTER COLUMN id SET DEFAULT nextv
 
 
 --
--- TOC entry 4807 (class 2604 OID 16465)
+-- TOC entry 3313 (class 2604 OID 24641)
 -- Name: Permissao id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -671,7 +636,7 @@ ALTER TABLE ONLY "zt-ehealth"."Permissao" ALTER COLUMN id SET DEFAULT nextval('"
 
 
 --
--- TOC entry 4808 (class 2604 OID 16466)
+-- TOC entry 3314 (class 2604 OID 24642)
 -- Name: Profissional id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -679,7 +644,7 @@ ALTER TABLE ONLY "zt-ehealth"."Profissional" ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- TOC entry 4809 (class 2604 OID 16467)
+-- TOC entry 3315 (class 2604 OID 24643)
 -- Name: Recurso id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -687,7 +652,7 @@ ALTER TABLE ONLY "zt-ehealth"."Recurso" ALTER COLUMN id SET DEFAULT nextval('"zt
 
 
 --
--- TOC entry 4810 (class 2604 OID 16468)
+-- TOC entry 3316 (class 2604 OID 24644)
 -- Name: RegLogin id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -695,15 +660,7 @@ ALTER TABLE ONLY "zt-ehealth"."RegLogin" ALTER COLUMN id SET DEFAULT nextval('"z
 
 
 --
--- TOC entry 4811 (class 2604 OID 16469)
--- Name: Senha id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
---
-
-ALTER TABLE ONLY "zt-ehealth"."Senha" ALTER COLUMN id SET DEFAULT nextval('"zt-ehealth"."Senha_id_seq"'::regclass);
-
-
---
--- TOC entry 4812 (class 2604 OID 16470)
+-- TOC entry 3318 (class 2604 OID 24645)
 -- Name: SensibilidadeSubRecurso id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -711,7 +668,7 @@ ALTER TABLE ONLY "zt-ehealth"."SensibilidadeSubRecurso" ALTER COLUMN id SET DEFA
 
 
 --
--- TOC entry 4813 (class 2604 OID 16471)
+-- TOC entry 3319 (class 2604 OID 24646)
 -- Name: SubRecurso id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -719,7 +676,7 @@ ALTER TABLE ONLY "zt-ehealth"."SubRecurso" ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 4814 (class 2604 OID 16472)
+-- TOC entry 3320 (class 2604 OID 24647)
 -- Name: Token id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -727,7 +684,7 @@ ALTER TABLE ONLY "zt-ehealth"."Token" ALTER COLUMN id SET DEFAULT nextval('"zt-e
 
 
 --
--- TOC entry 4815 (class 2604 OID 16473)
+-- TOC entry 3321 (class 2604 OID 24648)
 -- Name: Usuario id; Type: DEFAULT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -735,7 +692,7 @@ ALTER TABLE ONLY "zt-ehealth"."Usuario" ALTER COLUMN id SET DEFAULT nextval('"zt
 
 
 --
--- TOC entry 5012 (class 0 OID 16399)
+-- TOC entry 3517 (class 0 OID 24577)
 -- Dependencies: 216
 -- Data for Name: Acesso; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
@@ -743,7 +700,7 @@ ALTER TABLE ONLY "zt-ehealth"."Usuario" ALTER COLUMN id SET DEFAULT nextval('"zt
 
 
 --
--- TOC entry 5014 (class 0 OID 16404)
+-- TOC entry 3519 (class 0 OID 24582)
 -- Dependencies: 218
 -- Data for Name: CaracteristicaDispositivo; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
@@ -751,16 +708,15 @@ ALTER TABLE ONLY "zt-ehealth"."Usuario" ALTER COLUMN id SET DEFAULT nextval('"zt
 
 
 --
--- TOC entry 5016 (class 0 OID 16410)
+-- TOC entry 3521 (class 0 OID 24588)
 -- Dependencies: 220
 -- Data for Name: Cliente; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
 
-INSERT INTO "zt-ehealth"."Cliente" VALUES (1, 6);
 
 
 --
--- TOC entry 5017 (class 0 OID 16413)
+-- TOC entry 3522 (class 0 OID 24591)
 -- Dependencies: 221
 -- Data for Name: Dispositivo; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
@@ -768,7 +724,7 @@ INSERT INTO "zt-ehealth"."Cliente" VALUES (1, 6);
 
 
 --
--- TOC entry 5018 (class 0 OID 16416)
+-- TOC entry 3523 (class 0 OID 24594)
 -- Dependencies: 222
 -- Data for Name: DispositivoTMP; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
@@ -776,186 +732,23 @@ INSERT INTO "zt-ehealth"."Cliente" VALUES (1, 6);
 
 
 --
--- TOC entry 5022 (class 0 OID 16424)
+-- TOC entry 3527 (class 0 OID 24602)
 -- Dependencies: 226
 -- Data for Name: Permissao; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
 
-INSERT INTO "zt-ehealth"."Permissao" VALUES (801, 1, 1, 'Leitura', '2023-05-24 09:42:22.523995-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (802, 1, 2, 'Leitura', '2023-05-24 09:44:09.894398-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (803, 1, 2, 'Escrita', '2023-05-24 09:44:09.894398-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (804, 1, 2, 'Modificacao', '2023-05-24 09:44:09.894398-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (805, 1, 2, 'Exclusao', '2023-05-24 09:44:09.894398-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (806, 1, 3, 'Leitura', '2023-05-24 09:45:26.116141-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (807, 1, 3, 'Escrita', '2023-05-24 09:45:26.116141-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (808, 1, 3, 'Modificacao', '2023-05-24 09:45:26.116141-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (809, 1, 3, 'Exclusao', '2023-05-24 09:45:26.116141-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (810, 1, 4, 'Leitura', '2023-05-24 09:46:39.281641-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (811, 1, 4, 'Escrita', '2023-05-24 09:46:39.281641-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (812, 1, 4, 'Modificacao', '2023-05-24 09:46:39.281641-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (813, 1, 4, 'Exclusao', '2023-05-24 09:46:39.281641-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (814, 1, 5, 'Leitura', '2023-05-24 09:47:36.712956-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (815, 1, 5, 'Escrita', '2023-05-24 09:47:36.712956-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (816, 1, 5, 'Modificacao', '2023-05-24 09:47:36.712956-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (817, 1, 5, 'Exclusao', '2023-05-24 09:47:36.712956-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (818, 1, 6, 'Leitura', '2023-05-24 09:49:22.820335-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (819, 1, 6, 'Escrita', '2023-05-24 09:49:22.820335-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (820, 1, 6, 'Modificacao', '2023-05-24 09:49:22.820335-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (821, 1, 7, 'Leitura', '2023-05-24 09:50:16.313149-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (822, 1, 8, 'Leitura', '2023-05-24 09:50:54.077633-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (823, 1, 8, 'Escrita', '2023-05-24 09:50:54.077633-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (824, 1, 8, 'Modificacao', '2023-05-24 09:50:54.077633-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (825, 1, 8, 'Exclusao', '2023-05-24 09:50:54.077633-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (826, 1, 9, 'Leitura', '2023-05-24 09:53:05.519369-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (827, 1, 10, 'Leitura', '2023-05-24 09:53:41.119501-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (828, 1, 11, 'Leitura', '2023-05-24 09:54:26.269277-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (829, 1, 11, 'Escrita', '2023-05-24 09:54:26.269277-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (830, 1, 11, 'Modificacao', '2023-05-24 09:54:26.269277-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (831, 1, 11, 'Exclusao', '2023-05-24 09:54:26.269277-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (832, 1, 14, 'Leitura', '2023-05-24 09:55:22.541239-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (833, 1, 15, 'Leitura', '2023-05-24 09:56:15.118516-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (834, 1, 16, 'Leitura', '2023-05-24 09:57:19.483106-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (835, 1, 18, 'Leitura', '2023-05-24 09:58:10.641345-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (836, 1, 19, 'Leitura', '2023-05-24 09:58:40.640382-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (837, 1, 20, 'Leitura', '2023-05-24 09:59:19.420575-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (838, 1, 20, 'Escrita', '2023-05-24 09:59:19.420575-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (839, 1, 20, 'Modificacao', '2023-05-24 09:59:19.420575-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (840, 1, 20, 'Exclusao', '2023-05-24 09:59:19.420575-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (841, 1, 23, 'Leitura', '2023-05-24 10:02:54.956769-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (842, 1, 24, 'Leitura', '2023-05-24 10:04:04.705691-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (843, 1, 25, 'Leitura', '2023-05-24 10:04:47.102023-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (844, 1, 25, 'Escrita', '2023-05-24 10:04:47.102023-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (845, 1, 25, 'Exclusao', '2023-05-24 10:04:47.102023-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (846, 1, 26, 'Acesso', '2023-05-24 10:06:01.493265-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (847, 2, 1, 'Leitura', '2023-05-24 10:14:53.22344-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (848, 2, 2, 'Leitura', '2023-05-24 10:15:24.449359-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (849, 2, 2, 'Escrita', '2023-05-24 10:15:24.449359-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (850, 2, 2, 'Modificacao', '2023-05-24 10:15:24.449359-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (851, 2, 2, 'Exclusao', '2023-05-24 10:15:24.449359-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (852, 2, 3, 'Leitura', '2023-05-24 10:16:19.458837-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (853, 2, 3, 'Escrita', '2023-05-24 10:16:19.458837-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (854, 2, 3, 'Modificacao', '2023-05-24 10:16:19.458837-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (855, 2, 3, 'Exclusao', '2023-05-24 10:16:19.458837-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (856, 2, 4, 'Leitura', '2023-05-24 10:17:16.21039-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (857, 2, 4, 'Escrita', '2023-05-24 10:17:16.21039-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (858, 2, 4, 'Modificacao', '2023-05-24 10:17:16.21039-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (859, 2, 4, 'Exclusao', '2023-05-24 10:17:16.21039-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (860, 2, 5, 'Leitura', '2023-05-24 10:18:29.088346-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (861, 2, 5, 'Escrita', '2023-05-24 10:18:29.088346-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (862, 2, 5, 'Modificacao', '2023-05-24 10:18:29.088346-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (863, 2, 5, 'Exclusao', '2023-05-24 10:18:29.088346-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (864, 2, 6, 'Leitura', '2023-05-24 10:19:32.835518-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (865, 2, 6, 'Escrita', '2023-05-24 10:19:32.835518-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (866, 2, 6, 'Modificacao', '2023-05-24 10:19:32.835518-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (867, 2, 7, 'Leitura', '2023-05-24 10:20:24.459465-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (868, 2, 8, 'Leitura', '2023-05-24 10:22:31.571458-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (869, 2, 8, 'Escrita', '2023-05-24 10:22:31.571458-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (870, 2, 8, 'Modificacao', '2023-05-24 10:22:31.571458-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (871, 2, 8, 'Exclusao', '2023-05-24 10:22:31.571458-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (872, 2, 9, 'Leitura', '2023-05-24 10:23:24.062783-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (873, 2, 10, 'Leitura', '2023-05-24 10:23:59.834716-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (874, 2, 11, 'Leitura', '2023-05-24 10:24:32.581292-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (875, 2, 11, 'Escrita', '2023-05-24 10:24:32.581292-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (876, 2, 11, 'Modificacao', '2023-05-24 10:24:32.581292-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (877, 2, 11, 'Exclusao', '2023-05-24 10:24:32.581292-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (878, 2, 14, 'Leitura', '2023-05-24 10:25:42.849148-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (879, 2, 15, 'Leitura', '2023-05-24 10:26:31.595973-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (880, 2, 16, 'Leitura', '2023-05-24 10:27:05.084695-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (881, 2, 18, 'Leitura', '2023-05-24 10:27:39.024299-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (882, 2, 19, 'Leitura', '2023-05-24 10:28:04.233126-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (883, 2, 20, 'Leitura', '2023-05-24 10:28:42.675885-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (884, 2, 20, 'Escrita', '2023-05-24 10:28:42.675885-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (885, 2, 20, 'Modificacao', '2023-05-24 10:28:42.675885-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (886, 2, 20, 'Exclusao', '2023-05-24 10:28:42.675885-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (887, 2, 23, 'Leitura', '2023-05-24 10:29:55.700224-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (888, 2, 24, 'Leitura', '2023-05-24 10:30:31.738012-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (889, 2, 25, 'Leitura', '2023-05-24 10:31:01.961341-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (890, 2, 25, 'Escrita', '2023-05-24 10:31:01.961341-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (891, 2, 25, 'Exclusao', '2023-05-24 10:31:01.961341-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (892, 2, 26, 'Acesso', '2023-05-24 10:31:51.581223-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (893, 3, 1, 'Leitura', '2023-05-24 10:32:57.876515-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (894, 3, 2, 'Leitura', '2023-05-24 10:34:28.906775-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (895, 3, 3, 'Leitura', '2023-05-24 10:35:23.724742-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (896, 3, 3, 'Escrita', '2023-05-24 10:35:23.724742-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (897, 3, 3, 'Modificacao', '2023-05-24 10:35:23.724742-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (898, 3, 3, 'Exclusao', '2023-05-24 10:35:23.724742-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (899, 3, 5, 'Leitura', '2023-05-24 10:39:44.561347-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (900, 3, 7, 'Leitura', '2023-05-24 10:40:20.242879-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (901, 3, 8, 'Leitura', '2023-05-24 10:41:58.838373-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (902, 3, 9, 'Leitura', '2023-05-24 10:42:40.428267-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (903, 3, 10, 'Leitura', '2023-05-24 10:45:28.409437-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (904, 3, 11, 'Leitura', '2023-05-24 10:46:37.215794-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (905, 3, 14, 'Leitura', '2023-05-24 10:47:06.81154-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (906, 3, 15, 'Leitura', '2023-05-24 10:55:15.957319-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (907, 3, 16, 'Leitura', '2023-05-24 10:55:56.066439-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (908, 3, 19, 'Leitura', '2023-05-24 10:56:56.767223-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (909, 3, 20, 'Leitura', '2023-05-24 10:58:10.268207-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (910, 3, 23, 'Leitura', '2023-05-24 10:58:47.336147-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (911, 3, 24, 'Leitura', '2023-05-24 10:59:38.945141-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (912, 4, 1, 'Leitura', '2023-05-24 11:07:10.879409-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (913, 4, 1, 'Escrita', '2023-05-24 11:07:10.879409-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (914, 4, 1, 'Modificacao', '2023-05-24 11:07:10.879409-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (915, 4, 7, 'Leitura', '2023-05-24 11:08:43.321395-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (916, 4, 9, 'Leitura', '2023-05-24 11:09:17.615391-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (917, 4, 9, 'Escrita', '2023-05-24 11:09:17.615391-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (918, 4, 9, 'Modificacao', '2023-05-24 11:09:17.615391-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (919, 4, 11, 'Leitura', '2023-05-24 11:10:16.861504-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (920, 4, 12, 'Leitura', '2023-05-24 11:10:59.208254-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (921, 4, 12, 'Escrita', '2023-05-24 11:10:59.208254-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (922, 4, 12, 'Modificacao', '2023-05-24 11:10:59.208254-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (923, 4, 21, 'Leitura', '2023-05-24 11:17:00.508929-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (924, 4, 22, 'Leitura', '2023-05-24 11:17:32.270578-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (925, 4, 22, 'Escrita', '2023-05-24 11:17:32.270578-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (926, 4, 22, 'Modificacao', '2023-05-24 11:17:32.270578-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (927, 4, 22, 'Exclusao', '2023-05-24 11:17:32.270578-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (928, 4, 23, 'Leitura', '2023-05-24 11:19:35.09776-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (929, 5, 10, 'Leitura', '2023-05-24 11:32:56.116302-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (930, 5, 10, 'Escrita', '2023-05-24 11:32:56.116302-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (931, 5, 10, 'Modificacao', '2023-05-24 11:32:56.116302-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (932, 5, 10, 'Exclusao', '2023-05-24 11:32:56.116302-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (933, 5, 12, 'Leitura', '2023-05-24 11:34:06.426901-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (934, 5, 12, 'Escrita', '2023-05-24 11:34:06.426901-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (935, 5, 12, 'Modificacao', '2023-05-24 11:34:06.426901-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (936, 5, 12, 'Exclusao', '2023-05-24 11:34:06.426901-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (937, 5, 13, 'Leitura', '2023-05-24 11:35:14.588553-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (938, 5, 13, 'Escrita', '2023-05-24 11:35:14.588553-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (939, 5, 13, 'Modificacao', '2023-05-24 11:35:14.588553-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (940, 5, 13, 'Exclusao', '2023-05-24 11:35:14.588553-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (941, 5, 14, 'Leitura', '2023-05-24 11:36:37.086521-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (942, 5, 14, 'Escrita', '2023-05-24 11:36:37.086521-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (943, 5, 14, 'Modificacao', '2023-05-24 11:36:37.086521-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (944, 5, 14, 'Exclusao', '2023-05-24 11:36:37.086521-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (945, 6, 15, 'Leitura', '2023-05-24 11:39:58.211156-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (946, 6, 16, 'Leitura', '2023-05-24 11:40:19.467267-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (947, 6, 18, 'Leitura', '2023-05-24 11:40:40.355389-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (948, 6, 19, 'Leitura', '2023-05-24 11:42:14.584492-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (949, 6, 19, 'Modificacao', '2023-05-24 11:42:14.584492-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (950, 6, 20, 'Leitura', '2023-05-24 11:42:54.813301-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (951, 6, 21, 'Leitura', '2023-05-24 11:43:54.969993-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (952, 6, 22, 'Leitura', '2023-05-24 11:44:30.875866-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (953, 6, 22, 'Escrita', '2023-05-24 11:44:30.875866-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (954, 6, 23, 'Leitura', '2023-05-24 11:45:18.756764-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (955, 6, 23, 'Escrita', '2023-05-24 11:45:18.756764-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (956, 6, 24, 'Leitura', '2023-05-24 11:46:00.181497-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (957, 6, 24, 'Modificacao', '2023-05-24 11:46:00.181497-03', 'Ativo', NULL, NULL);
-INSERT INTO "zt-ehealth"."Permissao" VALUES (958, 6, 26, 'Acesso', '2023-05-24 11:46:41.699374-03', 'Ativo', NULL, NULL);
 
 
 --
--- TOC entry 5024 (class 0 OID 16428)
+-- TOC entry 3529 (class 0 OID 24606)
 -- Dependencies: 228
 -- Data for Name: Profissional; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
 
-INSERT INTO "zt-ehealth"."Profissional" VALUES (1, 'Médico', 'Wednesday-Thursday-Friday-Saturday-Sunday', 1, '08:00:00', '16:00:00');
-INSERT INTO "zt-ehealth"."Profissional" VALUES (2, 'Médico', 'Monday-Tuesday-Wednesday-Thursday-Friday', 2, '21:30:00', '11:00:00');
-INSERT INTO "zt-ehealth"."Profissional" VALUES (3, 'Enfermeiro', 'Tuesday-Wednesday-Thursday-Friday-Saturday', 3, '09:00:00', '17:00:00');
-INSERT INTO "zt-ehealth"."Profissional" VALUES (5, 'Administrador', 'Thursday-Friday-Saturday-Sunday-Monday', 5, '13:00:00', '22:00:00');
-INSERT INTO "zt-ehealth"."Profissional" VALUES (4, 'Atendente', 'Sunday-Monday-Tuesday-Wednesday-Thursday', 4, '15:00:00', '02:00:00');
 
 
 --
--- TOC entry 5026 (class 0 OID 16432)
+-- TOC entry 3531 (class 0 OID 24610)
 -- Dependencies: 230
 -- Data for Name: Recurso; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
@@ -968,7 +761,7 @@ INSERT INTO "zt-ehealth"."Recurso" VALUES (2, 'Sistema de Informacao Hospitalar'
 
 
 --
--- TOC entry 5028 (class 0 OID 16436)
+-- TOC entry 3533 (class 0 OID 24614)
 -- Dependencies: 232
 -- Data for Name: RegLogin; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
@@ -976,22 +769,8 @@ INSERT INTO "zt-ehealth"."Recurso" VALUES (2, 'Sistema de Informacao Hospitalar'
 
 
 --
--- TOC entry 5030 (class 0 OID 16440)
+-- TOC entry 3535 (class 0 OID 24619)
 -- Dependencies: 234
--- Data for Name: Senha; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
---
-
-INSERT INTO "zt-ehealth"."Senha" VALUES (2312, 1, 'cf6d058dedf9a66c5b039cec186022aab3f33d7bdd19112f07ed44e513d326fe', '2023-05-23 11:20:08.369516-03', 'Ativo');
-INSERT INTO "zt-ehealth"."Senha" VALUES (2313, 2, '0e3eb10df8dd1509b3f86c07974f3681f2fee0d603b5ad58c4e3374302804094', '2023-05-23 11:22:02.776633-03', 'Ativo');
-INSERT INTO "zt-ehealth"."Senha" VALUES (2314, 3, '28646fceb3510a46df7b489c7e994b14ab546809ca6e9e4945ccfbd0962e41bd', '2023-05-23 11:22:48.612575-03', 'Ativo');
-INSERT INTO "zt-ehealth"."Senha" VALUES (2315, 4, 'e15719bc1fd4d59cacc6a6dd7e1dc7779b80d48cd3fe38692f6f4ca395ff7223', '2023-05-23 11:23:31.749759-03', 'Ativo');
-INSERT INTO "zt-ehealth"."Senha" VALUES (2316, 5, 'd5ae99cacd4c196c87bf3fafeecb1a72f7cfcfd3834292b2a41e2fcd2520903e', '2023-05-23 11:24:48.398614-03', 'Ativo');
-INSERT INTO "zt-ehealth"."Senha" VALUES (2317, 6, '72863cd1a78bf14f433d6473930a60d21789b1c7655137dce2857f16ae5093e4', '2023-05-23 11:25:20.549288-03', 'Ativo');
-
-
---
--- TOC entry 5032 (class 0 OID 16444)
--- Dependencies: 236
 -- Data for Name: SensibilidadeSubRecurso; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1092,8 +871,8 @@ INSERT INTO "zt-ehealth"."SensibilidadeSubRecurso" VALUES (37, 10, 'Leitura', 18
 
 
 --
--- TOC entry 5034 (class 0 OID 16448)
--- Dependencies: 238
+-- TOC entry 3537 (class 0 OID 24623)
+-- Dependencies: 236
 -- Data for Name: SubRecurso; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1126,65 +905,59 @@ INSERT INTO "zt-ehealth"."SubRecurso" VALUES (25, 5, 'Gravacoes de Consultas');
 
 
 --
--- TOC entry 5036 (class 0 OID 16452)
--- Dependencies: 240
+-- TOC entry 3539 (class 0 OID 24627)
+-- Dependencies: 238
 -- Data for Name: Token; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
 
 
 
 --
--- TOC entry 5038 (class 0 OID 16456)
--- Dependencies: 242
+-- TOC entry 3541 (class 0 OID 24631)
+-- Dependencies: 240
 -- Data for Name: Usuario; Type: TABLE DATA; Schema: zt-ehealth; Owner: postgres
 --
 
-INSERT INTO "zt-ehealth"."Usuario" VALUES (6, 'Flávia Tatiane Aragão', 'Cliente', '773.391.700-06');
-INSERT INTO "zt-ehealth"."Usuario" VALUES (1, 'Enrico Murilo Viana', 'Profissional', '460.395.930-32');
-INSERT INTO "zt-ehealth"."Usuario" VALUES (2, 'Cecília Nair Stefany Dias', 'Profissional', '357.069.500-08');
-INSERT INTO "zt-ehealth"."Usuario" VALUES (3, 'Ryan Felipe Martin de Paula', 'Profissional', '649.122.660-35');
-INSERT INTO "zt-ehealth"."Usuario" VALUES (4, 'Andreia Juliana Santos', 'Profissional', '859.310.680-31');
-INSERT INTO "zt-ehealth"."Usuario" VALUES (5, 'Clarice Sarah da Cunha', 'Profissional', '465.994.610-00');
 
 
 --
--- TOC entry 5060 (class 0 OID 0)
+-- TOC entry 3562 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: Acesso_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."Acesso_id_seq"', 49123, true);
+SELECT pg_catalog.setval('"zt-ehealth"."Acesso_id_seq"', 50633, true);
 
 
 --
--- TOC entry 5061 (class 0 OID 0)
+-- TOC entry 3563 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: CaracteristicaDispositivo_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."CaracteristicaDispositivo_id_seq"', 453, true);
+SELECT pg_catalog.setval('"zt-ehealth"."CaracteristicaDispositivo_id_seq"', 471, true);
 
 
 --
--- TOC entry 5062 (class 0 OID 0)
+-- TOC entry 3564 (class 0 OID 0)
 -- Dependencies: 223
 -- Name: DispositivoTMP_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."DispositivoTMP_id_seq"', 17086, true);
+SELECT pg_catalog.setval('"zt-ehealth"."DispositivoTMP_id_seq"', 17482, true);
 
 
 --
--- TOC entry 5063 (class 0 OID 0)
+-- TOC entry 3565 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: Dispositivo_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."Dispositivo_id_seq"', 444, true);
+SELECT pg_catalog.setval('"zt-ehealth"."Dispositivo_id_seq"', 462, true);
 
 
 --
--- TOC entry 5064 (class 0 OID 0)
+-- TOC entry 3566 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: Paciente_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
@@ -1193,7 +966,7 @@ SELECT pg_catalog.setval('"zt-ehealth"."Paciente_id_seq"', 1, true);
 
 
 --
--- TOC entry 5065 (class 0 OID 0)
+-- TOC entry 3567 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: Permissao_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
@@ -1202,16 +975,16 @@ SELECT pg_catalog.setval('"zt-ehealth"."Permissao_id_seq"', 958, true);
 
 
 --
--- TOC entry 5066 (class 0 OID 0)
+-- TOC entry 3568 (class 0 OID 0)
 -- Dependencies: 229
 -- Name: Profissional_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."Profissional_id_seq"', 5, true);
+SELECT pg_catalog.setval('"zt-ehealth"."Profissional_id_seq"', 6, true);
 
 
 --
--- TOC entry 5067 (class 0 OID 0)
+-- TOC entry 3569 (class 0 OID 0)
 -- Dependencies: 231
 -- Name: Recurso_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
@@ -1220,26 +993,17 @@ SELECT pg_catalog.setval('"zt-ehealth"."Recurso_id_seq"', 5, true);
 
 
 --
--- TOC entry 5068 (class 0 OID 0)
+-- TOC entry 3570 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: RegLogin_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."RegLogin_id_seq"', 13232, true);
+SELECT pg_catalog.setval('"zt-ehealth"."RegLogin_id_seq"', 13570, true);
 
 
 --
--- TOC entry 5069 (class 0 OID 0)
+-- TOC entry 3571 (class 0 OID 0)
 -- Dependencies: 235
--- Name: Senha_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
---
-
-SELECT pg_catalog.setval('"zt-ehealth"."Senha_id_seq"', 2317, true);
-
-
---
--- TOC entry 5070 (class 0 OID 0)
--- Dependencies: 237
 -- Name: SensibilidadeSubRecurso_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1247,8 +1011,8 @@ SELECT pg_catalog.setval('"zt-ehealth"."SensibilidadeSubRecurso_id_seq"', 94, tr
 
 
 --
--- TOC entry 5071 (class 0 OID 0)
--- Dependencies: 239
+-- TOC entry 3572 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: SubRecurso_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1256,25 +1020,25 @@ SELECT pg_catalog.setval('"zt-ehealth"."SubRecurso_id_seq"', 26, true);
 
 
 --
--- TOC entry 5072 (class 0 OID 0)
--- Dependencies: 241
+-- TOC entry 3573 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: Token_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."Token_id_seq"', 12881, true);
+SELECT pg_catalog.setval('"zt-ehealth"."Token_id_seq"', 13216, true);
 
 
 --
--- TOC entry 5073 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3574 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: Usuario_id_seq; Type: SEQUENCE SET; Schema: zt-ehealth; Owner: postgres
 --
 
-SELECT pg_catalog.setval('"zt-ehealth"."Usuario_id_seq"', 6, true);
+SELECT pg_catalog.setval('"zt-ehealth"."Usuario_id_seq"', 7, true);
 
 
 --
--- TOC entry 4817 (class 2606 OID 16475)
+-- TOC entry 3324 (class 2606 OID 24650)
 -- Name: Acesso Acesso_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1283,7 +1047,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4819 (class 2606 OID 16477)
+-- TOC entry 3326 (class 2606 OID 24652)
 -- Name: CaracteristicaDispositivo CaracteristicaDispositivo_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1292,7 +1056,7 @@ ALTER TABLE ONLY "zt-ehealth"."CaracteristicaDispositivo"
 
 
 --
--- TOC entry 4825 (class 2606 OID 16479)
+-- TOC entry 3332 (class 2606 OID 24654)
 -- Name: DispositivoTMP DispositivoTMP_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1301,7 +1065,7 @@ ALTER TABLE ONLY "zt-ehealth"."DispositivoTMP"
 
 
 --
--- TOC entry 4823 (class 2606 OID 16481)
+-- TOC entry 3330 (class 2606 OID 24656)
 -- Name: Dispositivo Dispositivo_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1310,7 +1074,7 @@ ALTER TABLE ONLY "zt-ehealth"."Dispositivo"
 
 
 --
--- TOC entry 4821 (class 2606 OID 16483)
+-- TOC entry 3328 (class 2606 OID 24658)
 -- Name: Cliente Paciente_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1319,7 +1083,7 @@ ALTER TABLE ONLY "zt-ehealth"."Cliente"
 
 
 --
--- TOC entry 4827 (class 2606 OID 16485)
+-- TOC entry 3334 (class 2606 OID 24660)
 -- Name: Permissao Permissao_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1328,7 +1092,7 @@ ALTER TABLE ONLY "zt-ehealth"."Permissao"
 
 
 --
--- TOC entry 4829 (class 2606 OID 16487)
+-- TOC entry 3336 (class 2606 OID 24662)
 -- Name: Profissional Profissional_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1337,7 +1101,7 @@ ALTER TABLE ONLY "zt-ehealth"."Profissional"
 
 
 --
--- TOC entry 4831 (class 2606 OID 16489)
+-- TOC entry 3338 (class 2606 OID 24664)
 -- Name: Recurso Recurso_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1346,7 +1110,7 @@ ALTER TABLE ONLY "zt-ehealth"."Recurso"
 
 
 --
--- TOC entry 4833 (class 2606 OID 16491)
+-- TOC entry 3340 (class 2606 OID 24666)
 -- Name: RegLogin RegLogin_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1355,16 +1119,7 @@ ALTER TABLE ONLY "zt-ehealth"."RegLogin"
 
 
 --
--- TOC entry 4835 (class 2606 OID 16493)
--- Name: Senha Senha_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
---
-
-ALTER TABLE ONLY "zt-ehealth"."Senha"
-    ADD CONSTRAINT "Senha_pkey" PRIMARY KEY (id);
-
-
---
--- TOC entry 4837 (class 2606 OID 16495)
+-- TOC entry 3344 (class 2606 OID 24668)
 -- Name: SensibilidadeSubRecurso SensibilidadeSubRecurso_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1373,7 +1128,7 @@ ALTER TABLE ONLY "zt-ehealth"."SensibilidadeSubRecurso"
 
 
 --
--- TOC entry 4839 (class 2606 OID 16497)
+-- TOC entry 3346 (class 2606 OID 24670)
 -- Name: SubRecurso SubRecurso_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1382,7 +1137,7 @@ ALTER TABLE ONLY "zt-ehealth"."SubRecurso"
 
 
 --
--- TOC entry 4841 (class 2606 OID 16499)
+-- TOC entry 3348 (class 2606 OID 24672)
 -- Name: Token Token_hash_key; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1391,7 +1146,7 @@ ALTER TABLE ONLY "zt-ehealth"."Token"
 
 
 --
--- TOC entry 4843 (class 2606 OID 16501)
+-- TOC entry 3350 (class 2606 OID 24674)
 -- Name: Token Token_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1400,7 +1155,7 @@ ALTER TABLE ONLY "zt-ehealth"."Token"
 
 
 --
--- TOC entry 4845 (class 2606 OID 16503)
+-- TOC entry 3352 (class 2606 OID 24676)
 -- Name: Usuario Usuario_cpf_key; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1409,7 +1164,7 @@ ALTER TABLE ONLY "zt-ehealth"."Usuario"
 
 
 --
--- TOC entry 4847 (class 2606 OID 16505)
+-- TOC entry 3354 (class 2606 OID 24678)
 -- Name: Usuario Usuario_pkey; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1418,7 +1173,16 @@ ALTER TABLE ONLY "zt-ehealth"."Usuario"
 
 
 --
--- TOC entry 4848 (class 2606 OID 16506)
+-- TOC entry 3342 (class 2606 OID 24680)
+-- Name: RegLogin codigoAutorizacao; Type: CONSTRAINT; Schema: zt-ehealth; Owner: postgres
+--
+
+ALTER TABLE ONLY "zt-ehealth"."RegLogin"
+    ADD CONSTRAINT "codigoAutorizacao" UNIQUE ("codigoAutorizacao");
+
+
+--
+-- TOC entry 3355 (class 2606 OID 24681)
 -- Name: Acesso Acesso_idDispositivoTMP_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1427,7 +1191,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4849 (class 2606 OID 16511)
+-- TOC entry 3356 (class 2606 OID 24686)
 -- Name: Acesso Acesso_idDispositivo_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1436,7 +1200,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4850 (class 2606 OID 16516)
+-- TOC entry 3357 (class 2606 OID 24691)
 -- Name: Acesso Acesso_idPermissao_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1445,7 +1209,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4851 (class 2606 OID 16521)
+-- TOC entry 3358 (class 2606 OID 24696)
 -- Name: Acesso Acesso_idSensibilidadeSubRecurso_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1454,7 +1218,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4852 (class 2606 OID 16526)
+-- TOC entry 3359 (class 2606 OID 24701)
 -- Name: Acesso Acesso_idSubRecurso_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1463,7 +1227,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4853 (class 2606 OID 16531)
+-- TOC entry 3360 (class 2606 OID 24706)
 -- Name: Acesso Acesso_idToken_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1472,7 +1236,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4854 (class 2606 OID 16536)
+-- TOC entry 3361 (class 2606 OID 24711)
 -- Name: Acesso Acesso_idUsuario_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1481,7 +1245,7 @@ ALTER TABLE ONLY "zt-ehealth"."Acesso"
 
 
 --
--- TOC entry 4855 (class 2606 OID 16541)
+-- TOC entry 3362 (class 2606 OID 24716)
 -- Name: Cliente Paciente_idUsuario_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1490,7 +1254,7 @@ ALTER TABLE ONLY "zt-ehealth"."Cliente"
 
 
 --
--- TOC entry 4856 (class 2606 OID 16546)
+-- TOC entry 3363 (class 2606 OID 24721)
 -- Name: Permissao Permissao_idDispositivo_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1499,7 +1263,7 @@ ALTER TABLE ONLY "zt-ehealth"."Permissao"
 
 
 --
--- TOC entry 4857 (class 2606 OID 16551)
+-- TOC entry 3364 (class 2606 OID 24726)
 -- Name: Permissao Permissao_idSubRecurso_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1508,7 +1272,7 @@ ALTER TABLE ONLY "zt-ehealth"."Permissao"
 
 
 --
--- TOC entry 4858 (class 2606 OID 16556)
+-- TOC entry 3365 (class 2606 OID 24731)
 -- Name: Permissao Permissao_idUsuario_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1517,7 +1281,7 @@ ALTER TABLE ONLY "zt-ehealth"."Permissao"
 
 
 --
--- TOC entry 4859 (class 2606 OID 16561)
+-- TOC entry 3366 (class 2606 OID 24736)
 -- Name: Profissional Profissional_idUsuario_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1526,7 +1290,7 @@ ALTER TABLE ONLY "zt-ehealth"."Profissional"
 
 
 --
--- TOC entry 4860 (class 2606 OID 16566)
+-- TOC entry 3367 (class 2606 OID 24741)
 -- Name: RegLogin RegLogin_idDispositivo_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1535,16 +1299,7 @@ ALTER TABLE ONLY "zt-ehealth"."RegLogin"
 
 
 --
--- TOC entry 4861 (class 2606 OID 16571)
--- Name: RegLogin RegLogin_idSenha_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
---
-
-ALTER TABLE ONLY "zt-ehealth"."RegLogin"
-    ADD CONSTRAINT "RegLogin_idSenha_fkey" FOREIGN KEY ("idSenha") REFERENCES "zt-ehealth"."Senha"(id) ON UPDATE CASCADE ON DELETE RESTRICT NOT VALID;
-
-
---
--- TOC entry 4862 (class 2606 OID 16576)
+-- TOC entry 3368 (class 2606 OID 24746)
 -- Name: RegLogin RegLogin_idUsuario_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1553,16 +1308,7 @@ ALTER TABLE ONLY "zt-ehealth"."RegLogin"
 
 
 --
--- TOC entry 4863 (class 2606 OID 16581)
--- Name: Senha Senha_idUsuario_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
---
-
-ALTER TABLE ONLY "zt-ehealth"."Senha"
-    ADD CONSTRAINT "Senha_idUsuario_fkey" FOREIGN KEY ("idUsuario") REFERENCES "zt-ehealth"."Usuario"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- TOC entry 4864 (class 2606 OID 16586)
+-- TOC entry 3369 (class 2606 OID 24751)
 -- Name: SensibilidadeSubRecurso SensibilidadeSubRecurso_idSubRecurso_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1571,7 +1317,7 @@ ALTER TABLE ONLY "zt-ehealth"."SensibilidadeSubRecurso"
 
 
 --
--- TOC entry 4865 (class 2606 OID 16591)
+-- TOC entry 3370 (class 2606 OID 24756)
 -- Name: SubRecurso SubRecurso_idRecurso_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1580,7 +1326,7 @@ ALTER TABLE ONLY "zt-ehealth"."SubRecurso"
 
 
 --
--- TOC entry 4866 (class 2606 OID 16596)
+-- TOC entry 3371 (class 2606 OID 24761)
 -- Name: Token Token_idDispositivo_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1589,7 +1335,7 @@ ALTER TABLE ONLY "zt-ehealth"."Token"
 
 
 --
--- TOC entry 4867 (class 2606 OID 16601)
+-- TOC entry 3372 (class 2606 OID 24766)
 -- Name: Token Token_idRegLogin_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1598,7 +1344,7 @@ ALTER TABLE ONLY "zt-ehealth"."Token"
 
 
 --
--- TOC entry 4868 (class 2606 OID 16606)
+-- TOC entry 3373 (class 2606 OID 24771)
 -- Name: Token Token_idUsuario_fkey; Type: FK CONSTRAINT; Schema: zt-ehealth; Owner: postgres
 --
 
@@ -1606,9 +1352,15 @@ ALTER TABLE ONLY "zt-ehealth"."Token"
     ADD CONSTRAINT "Token_idUsuario_fkey" FOREIGN KEY ("idUsuario") REFERENCES "zt-ehealth"."Usuario"(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
--- Completed on 2025-03-11 11:20:27
+-- Completed on 2025-04-16 21:35:51 UTC
 
 --
 -- PostgreSQL database dump complete
+--
+
+-- Completed on 2025-04-16 21:35:51 UTC
+
+--
+-- PostgreSQL database cluster dump complete
 --
 

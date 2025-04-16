@@ -3,6 +3,14 @@
 
 docker/volumes
 
+# datasets
+authdataset/bidmc_csv
+authdataset/dataverse_csv
+authdataset/troika
+
+# biometric templates
+idp-server/services/biometric_templates/*.json
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -23,13 +23,13 @@ class SignalValidator:
         }
     
     def _validate_ppg(self, signal):
-        # Implementação detalhada
+        # À implementar...
         return {
             'valid': True
         }
 
     def _validate_ecg(self, signal):
-        # Implementação detalhada
+        # À implementar...
         return {
             'valid': True
         }

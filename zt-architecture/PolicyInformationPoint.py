@@ -18,7 +18,7 @@ class PolicyInformationPoint:
             self.config['dbPort'] = int(os.getenv("DBPORT", 5432))
             self.config['dbDatabase'] = os.getenv("DBDATABASE", "zt-ehealth")
             self.config['dbUser'] = os.getenv("DBUSER", "postgres")
-            self.config['dbPassword'] = os.getenv("DBPASSWORD")
+            self.config['dbPassword'] = os.getenv("DBPASSWORD", "")
             
             self.connection = None
             self.connect()
@@ -43,6 +43,264 @@ class PolicyInformationPoint:
     def closeConnection(self) -> None:
         if self.connection:
             self.connection.close()
+
+    def registerUser(self, name, type, registry, registryCode, date):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Usuario\" (\"nome\", \"tipo\", \"cpf\", \"codigoCriacao\", \"dataCriacao\") VALUES ('"+name+"', '"+type+"', '"+registry+"', '"+registryCode+"', '"+date+"') RETURNING id")
+                userId = cursor.fetchone()[0]
+
+                if userId:
+                    self.connection.commit()
+                    return userId
+                return None
+        except Exception as e:
+            print(e)
+            return None
+        
+    def registerProfessional(self, position, daysWork, idUser, startWorkingHours, endWorkingHours):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Profissional\" (\"cargo\", \"diasTrabalho\", \"idUsuario\", \"horarioTrabalhoInicio\", \"horarioTrabalhoFinal\") VALUES ('"+position+"', '"+daysWork+"', '"+str(idUser)+"', '"+startWorkingHours+"', '"+endWorkingHours+"') RETURNING id")
+                professionalId = cursor.fetchone()[0]
+
+                if professionalId:
+                    self.connection.commit()
+                    return professionalId
+                return None
+
+        except Exception as e:
+            print(e)
+            return None
+        
+    def registerPatient(self, userId):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Paciente\" (\"idUsuario\") VALUES ('"+str(userId)+"') RETURNING id")
+                patientId = cursor.fetchone()[0]
+
+                if patientId:
+                    self.connection.commit()
+                    return patientId
+                return None
+        except Exception as e:
+            print(e)
+            return None
+        
+    def registerPermission(self, userId, subResourceName, resourceName, action, date, status):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"SubRecurso\" WHERE nome = '"+subResourceName+"' AND \"idRecurso\" = (SELECT id FROM \"zt-ehealth\".\"Recurso\" WHERE nome = '"+resourceName+"')")
+                idSubResource = cursor.fetchone()
+                if idSubResource:
+                    cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '"+str(idSubResource[0])+"', '"+str(action)+"', '"+str(date)+"', '"+str(status)+"') RETURNING id")
+                    permissionId = cursor.fetchone()[0]
+                    if permissionId:
+                        self.connection.commit()
+                        return permissionId
+                return None
+        except Exception as e:
+            print(e)
+            return None
+        
+    def registerPermissionForDoctors(self, userId, date):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '1', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '2', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '2', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '2', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '2', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '4', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '4', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '4', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '4', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '5', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '5', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '5', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '5', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '6', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '6', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '6', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '7', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '8', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '8', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '8', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '8', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '9', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '10', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '11', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '11', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '11', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '11', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '14', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '15', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '16', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '18', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '19', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '20', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '20', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '20', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '20', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '23', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '24', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '25', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '25', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '25', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '26', 'Acesso', '"+str(date)+"', 'Ativo') RETURNING id")
+                rows_affected = cursor.rowcount
+                if rows_affected > 0:
+                    self.connection.commit()
+                    return True
+                return False
+        except Exception as e:
+            print(e)
+            return False
+        
+    def registerPermissionForNurse(self, userId, date):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '1', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '2', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '3', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '5', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '7', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '8', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '9', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '10', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '11', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '14', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '15', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '16', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '19', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '20', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '23', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '24', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                rows_affected = cursor.rowcount
+                if rows_affected > 0:
+                    self.connection.commit()
+                    return True
+                return False
+        except Exception as e:
+            print(e)
+            return False
+        
+    def registerPermissionForAttendant(self, userId, date):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '1', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '1', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '1', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '7', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '9', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '9', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '9', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '11', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '12', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '12', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '12', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '21', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '22', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '22', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '22', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '22', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '23', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                rows_affected = cursor.rowcount
+                if rows_affected > 0:
+                    self.connection.commit()
+                    return True
+                return False
+        except Exception as e:
+            print(e)
+            return False
+        
+    def registerPermissionForAdministrator(self, userId, date):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '10', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '10', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '10', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '10', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '12', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '12', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '12', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '12', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '13', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '13', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '13', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '13', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '14', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '14', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '14', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '14', 'Exclusao', '"+str(date)+"', 'Ativo') RETURNING id")
+                rows_affected = cursor.rowcount
+                if rows_affected > 0:
+                    self.connection.commit()
+                    return True
+                return False
+        except Exception as e:
+            print(e)
+            return False
+        
+    def registerPermissionForPatient(self, userId, date):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '15', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '16', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '18', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '19', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '19', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '20', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '21', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '22', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '22', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '23', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '23', 'Escrita', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '24', 'Leitura', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '24', 'Modificacao', '"+str(date)+"', 'Ativo') RETURNING id")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Permissao\" (\"idUsuario\", \"idSubRecurso\", \"tipoAcao\", \"dataCriacao\", \"status\") VALUES ('"+str(userId)+"', '26', 'Acesso', '"+str(date)+"', 'Ativo') RETURNING id")
+                rows_affected = cursor.rowcount
+                if rows_affected > 0:
+                    self.connection.commit()
+                    return True
+                return False
+        except Exception as e:
+            print(e)
+            return False
 
     def getUserAttributes(self, token) -> json:
         if not self.connection:

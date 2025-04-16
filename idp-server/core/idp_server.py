@@ -10,6 +10,7 @@ import os
 from validators.signal_validator import SignalValidator
 import concurrent.futures
 import logging
+from ml_models.load_models import loadModel
 
 class IDPServer:
     config = {
@@ -27,6 +28,12 @@ class IDPServer:
 
         self.ssl_context = self._create_ssl_context()
 
+        # Carrega modelos
+        self.model_cnn1_ppg = loadModel('ppg', 'CNN1')
+        self.model_cnn1_ecg = loadModel('ecg', 'CNN1')
+        self.model_cnn2_ppg = loadModel('ppg', 'CNN2')
+        self.model_cnn2_ecg = loadModel('ecg', 'CNN2')
+
         # Inicializa o store
         self.store_service= StoreService()
         
@@ -36,9 +43,7 @@ class IDPServer:
         
         # Inicializa serviços
         signal_validator = SignalValidator()
-        self.auth_service = AuthService(self.token_manager, signal_validator, self.store_service)
-
-        # Carrega modelo CNN treinada
+        self.auth_service = AuthService(self.token_manager, signal_validator, self.store_service, self.model_cnn1_ppg, self.model_cnn1_ecg, self.model_cnn2_ppg, self.model_cnn2_ecg)
         
 
     def _create_ssl_context(self) -> ssl.SSLContext:
@@ -49,10 +54,18 @@ class IDPServer:
         return context
 
     def _handle_client(self, secure_socket, address):
+        logging.info("TTSS: before handle client")
         # Manipula uma conexão de cliente
         try:
-            # Recebe e processa a requisição
-            raw_data = secure_socket.recv(4096).decode('utf-8')
+            raw_data = ''
+            while True:
+                aux = secure_socket.recv(16384).decode('utf-8')
+                if not aux:
+                    break
+                raw_data += aux
+                if '\0' in raw_data:
+                    raw_data = raw_data.split('\0')[0] 
+                    break
             request_data = json.loads(raw_data)
             
             # Validação básica da requisição
@@ -66,20 +79,14 @@ class IDPServer:
                     'message': 'Missing server authorization code'
                 }).encode())
                 return
-            # TODO: Verificar código de autenticação zt
-            
-            # Autenticação do dispositivo iot via certificado
-            device_iot_id = "device1" # self._authenticate_device(request_data)
-            if not device_iot_id:
-                secure_socket.send(json.dumps({
-                    'status': 'error',
-                    'message': 'Device IoT authentication failed'
-                }).encode())
-                return
             
             # Validação dos dispositivo utilizado
-            # TODO: Validar dispositivo
-            device_id = self.store_service.getDeviceIdByCode(server_authorization_code)
+            device_id = ""
+            if request_data['endpoint'] != 'register':
+                device_id = self.store_service.getDeviceIdByCode(server_authorization_code)
+            else:
+                if request_data['device_mac']:
+                    device_id = self.store_service.getDeviceIdByMac(request_data['device_mac'])
             if not device_id:
                 secure_socket.send(json.dumps({
                     'status': 'error',
@@ -88,18 +95,18 @@ class IDPServer:
                 return
 
             # Processamento pela camada de handler
-            # TODO: Adicionar load do modelo CNN
             handler = RequestHandler(
                 auth_service=self.auth_service,
                 token_manager=self.token_manager,
                 rate_limiter=self.rate_limiter
             )
             
-            response = handler.handle_request(request_data, device_iot_id, device_id, address[0])
+            response = handler.handle_request(request_data, device_id, address[0])
             secure_socket.send(json.dumps(response).encode('utf-8'))
 
-        except json.JSONDecodeError:
-            logging.error("Error: Invalid JSON format")
+        except json.JSONDecodeError as e:
+            logging.error(raw_data)
+            logging.error("Invalid JSON format: "+ str(e))
             error_msg = {'status': 'error', 'message': 'Invalid JSON format'}
             secure_socket.send(json.dumps(error_msg).encode('utf-8'))
         except Exception as e:
@@ -108,37 +115,7 @@ class IDPServer:
             secure_socket.send(json.dumps(error_msg).encode('utf-8'))
         finally:
             secure_socket.close()
-
-    def _authenticate_iot_device(self, request_data):
-        # Valida certificado do dispositivo de captura de sinais
-        try:
-            cert = request_data['device_ioht_cert']
-            if not cert:
-                return None
-                
-            # Extrai identificador do certificado (simplificado)
-            import hashlib
-            cert_hash = hashlib.sha256(str(cert).encode()).hexdigest()
-            
-            # TODO: Verificar se o certificado está registrado
-            return f"device_{cert_hash[:8]}"
-        except Exception as e:
-            logging.error("Device authentication error: " + str(e))
-            return None
-        
-    def _check_device(self, request_data):
-        # Valida certificado do dispositivo de captura de sinais
-        try:
-            MAC = request_data['device_mac']
-            DFP = request_data['device_fp']
-
-            if not MAC or not DFP:
-                return None
-            
-            return f"device_{MAC}_{DFP}"
-        except Exception as e:
-            logging.error("Device authentication error: " + str(e))
-            return None
+        logging.info("TTSS: after handle client")
 
     def start(self):
         # Inicia o servidor IDP
@@ -148,8 +125,6 @@ class IDPServer:
         server_socket.listen()
 
         logging.info("IDP server started!")
-
-        # logging.info(f'Waiting for connections at {self.config['ip_address']}:{self.config['port']}')
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
             while True:

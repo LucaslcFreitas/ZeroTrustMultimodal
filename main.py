@@ -36,26 +36,26 @@ def startClients():
         match option:
             case "1":
                 instanceName = "instance-C1.json"
-            case "2":
-                instanceName = "instance-C2T1.json"
-            case "3":
-                instanceName = "instance-C2T2.json"
-            case "4":
-                instanceName = "instance-C3.json"
-            case "5":
-                instanceName = "instance-C4T1.json"
-            case "6":
-                instanceName = "instance-C4T2.json"
-            case "7":
-                instanceName = "instance-C5.json"
-            case "8":
-                instanceName = "instance-C6T1.json"
-            case "9":
-                instanceName = "instance-C6T2.json"
-            case "10":
-                instanceName = "instance-C6T3.json"
-            case "11":
-                instanceName = "instance-C6T4.json"
+            # case "2":
+            #     instanceName = "instance-C2T1.json"
+            # case "3":
+            #     instanceName = "instance-C2T2.json"
+            # case "4":
+            #     instanceName = "instance-C3.json"
+            # case "5":
+            #     instanceName = "instance-C4T1.json"
+            # case "6":
+            #     instanceName = "instance-C4T2.json"
+            # case "7":
+            #     instanceName = "instance-C5.json"
+            # case "8":
+            #     instanceName = "instance-C6T1.json"
+            # case "9":
+            #     instanceName = "instance-C6T2.json"
+            # case "10":
+            #     instanceName = "instance-C6T3.json"
+            # case "11":
+            #     instanceName = "instance-C6T4.json"
             case "12":
                 exit()
             case _:
@@ -88,17 +88,18 @@ def startClients():
 
 def printMenu():
     print("SELECIONE O CENÁRIO:")
+    print("Temporariamente limitado")
     print("1 - Cenário 1 - Acesso Normal")
-    print("2 - Cenário 2 - Roubo de Token - Teste 1")
-    print("3 - Cenário 2 - Roubo de Token - Teste 2")
-    print("4 - Cenário 3 - Roubo de Credenciais")
-    print("5 - Cenário 4 - Ataque de Força Bruta - Sem Sucesso")
-    print("6 - Cenário 4 - Ataque de Força Bruta - Com Sucesso")
-    print("7 - Cenário 5 - Dispositivo Compartilhado")
-    print("8 - Cenário 6 - Acesso fora do Horário - Teste 1")
-    print("9 - Cenário 6 - Acesso fora do Horário - Teste 2")
-    print("10 - Cenário 6 - Acesso fora do Horário - Teste 3")
-    print("11 - Cenário 6 - Acesso fora do Horário - Teste 4")
+    # print("2 - Cenário 2 - Roubo de Token - Teste 1")
+    # print("3 - Cenário 2 - Roubo de Token - Teste 2")
+    # print("4 - Cenário 3 - Roubo de Credenciais")
+    # print("5 - Cenário 4 - Ataque de Força Bruta - Sem Sucesso")
+    # print("6 - Cenário 4 - Ataque de Força Bruta - Com Sucesso")
+    # print("7 - Cenário 5 - Dispositivo Compartilhado")
+    # print("8 - Cenário 6 - Acesso fora do Horário - Teste 1")
+    # print("9 - Cenário 6 - Acesso fora do Horário - Teste 2")
+    # print("10 - Cenário 6 - Acesso fora do Horário - Teste 3")
+    # print("11 - Cenário 6 - Acesso fora do Horário - Teste 4")
     print("12 - SAIR")
 
 if __name__ == "__main__":

@@ -43,23 +43,7 @@ class StoreService:
 
         try: 
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+registry+"'")
-                result = cursor.fetchone()
-                if result:
-                    return result[0]
-                return None
-
-        except Exception as e:
-            print(e)
-            return None
-
-    def validityRegLoginByAuthorizationCode(self, userId, authorizationCode):
-        if not self.connection:
-            self.connect()
-
-        try:
-            with self.connection.cursor() as cursor:
-                cursor.execute("SELECT id FROM \"zt-ehealth\".\"RegLogin\" WHERE \"idUsuario\" = '"+str(userId)+"' AND \"codigoAutorizacao\" = '"+authorizationCode+"' AND completado = 'false'")
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+registry+"' AND ativado = 'true'")
                 result = cursor.fetchone()
                 if result:
                     return result[0]
@@ -69,13 +53,65 @@ class StoreService:
             print(e)
             return None
         
-    def updateRegLogin(self, idRegLogin, decision, authorizationCode, scorePPG, scoreECG):
+    def getUserIdToRegister(self, registry, authorization_code):
+        if not self.connection:
+            self.connect()
+
+        try: 
+            with self.connection.cursor() as cursor:
+                print("Select id to register")
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+registry+"' AND \"codigoCriacao\" = '"+authorization_code+"' AND ativado = 'false'")
+                result = cursor.fetchone()
+                print(result)
+                if result:
+                    return result[0]
+                return None
+
+        except Exception as e:
+            print(e)
+            return None
+        
+    def approveRegistry(self, registry, authorization_code):
+        if not self.connection:
+            self.connect()
+
+        try: 
+            with self.connection.cursor() as cursor:
+                cursor.execute("UPDATE \"zt-ehealth\".\"Usuario\" SET ativado = 'true' WHERE cpf = '"+registry+"' AND \"codigoCriacao\" = '"+authorization_code+"'")
+                updated = cursor.rowcount
+
+                self.connection.commit()
+                if updated > 0:
+                    return True
+                return False
+
+        except Exception as e:
+            print(e)
+            return None
+
+    def validityRegLoginByAuthorizationCode(self, user_id, authorization_code):
         if not self.connection:
             self.connect()
 
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("UPDATE \"zt-ehealth\".\"RegLogin\" SET resultado = '"+str(decision)+"', completado='True', \"scorePPG\" = '"+str(scorePPG)+"', \"scoreECG\" = '"+str(scoreECG)+"' WHERE id = '"+str(idRegLogin)+"' AND \"codigoAutorizacao\" = '"+authorizationCode+"'")
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"RegLogin\" WHERE \"idUsuario\" = '"+str(user_id)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"' AND completado = 'false'")
+                result = cursor.fetchone()
+                if result:
+                    return result[0]
+                return None
+
+        except Exception as e:
+            print(e)
+            return None
+        
+    def updateRegLogin(self, id_reg_login, decision, authorization_code, score_ppg, score_ecg):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("UPDATE \"zt-ehealth\".\"RegLogin\" SET resultado = '"+str(decision)+"', completado='True', \"_ppg= '"+str(score_ppg)+"', \"scoreECG\" = '"+str(score_ecg)+"' WHERE id = '"+str(id_reg_login)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"'")
                 updated = cursor.rowcount
 
                 self.connection.commit()
@@ -87,14 +123,14 @@ class StoreService:
             print(e)
             return None
         
-    def updateAndRegisterToken(self, idUser, idRegLogin, token, validity, idDevice):
+    def updateAndRegisterToken(self, id_user, id_reg_login, token, validity, id_device):
         if not self.connection:
             self.connect()
 
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("UPDATE \"zt-ehealth\".\"Token\" SET status='Inativo' WHERE \"idUsuario\" = '"+str(idUser)+"' AND status = 'Ativo'")
-                cursor.execute("INSERT INTO \"zt-ehealth\".\"Token\"(\"idUsuario\", \"idRegLogin\", hash, validade, status, \"idDispositivo\") VALUES ('"+str(idUser)+"', '"+str(idRegLogin)+"', '"+token+"', '"+str(validity)+"', 'Ativo', '"+str(idDevice)+"')")
+                cursor.execute("UPDATE \"zt-ehealth\".\"Token\" SET status='Inativo' WHERE \"idUsuario\" = '"+str(id_user)+"' AND status = 'Ativo'")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Token\"(\"idUsuario\", \"idRegLogin\", hash, validade, status, \"idDispositivo\") VALUES ('"+str(id_user)+"', '"+str(id_reg_login)+"', '"+token+"', '"+str(validity)+"', 'Ativo', '"+str(id_device)+"')")
 
                 self.connection.commit()
                 updated = cursor.rowcount
@@ -106,13 +142,29 @@ class StoreService:
             print(e)
             return None
         
-    def getDeviceIdByCode(self, authorizationCode):
+    def getDeviceIdByCode(self, authorization_code):
         if not self.connection:
             self.connect()
 
         try:
             with self.connection.cursor() as cursor:
-                cursor.execute("SELECT \"idDispositivo\" FROM \"zt-ehealth\".\"RegLogin\" WHERE \"codigoAutorizacao\" = '"+authorizationCode+"' AND completado = 'false'")
+                cursor.execute("SELECT \"idDispositivo\" FROM \"zt-ehealth\".\"RegLogin\" WHERE \"codigoAutorizacao\" = '"+authorization_code+"' AND completado = 'false'")
+                result = cursor.fetchone()
+                if result:
+                    return result[0]
+                return None
+
+        except Exception as e:
+            print(e)
+            return None
+    
+    def getDeviceIdByMac(self, MAC):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"Dispositivo\" WHERE \"MAC\" = '"+MAC+"'")
                 result = cursor.fetchone()
                 if result:
                     return result[0]

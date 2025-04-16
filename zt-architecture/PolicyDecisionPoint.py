@@ -41,8 +41,58 @@ class PolicyDecisionPoint:
             case TypeRequest.REAUTHENTICATION:
                 if (data['TOKEN'] and data['REGISTRY'] and data['IP_ADDRESS'] and data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME'] and data['ID_ACCESS']):
                     return self.__afterReauthentication(data['TOKEN'], data['REGISTRY'], data['TIME'], data['ID_ACCESS'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'], data['IP_ADDRESS'], data['LATITUDE'], data['LONGITUDE'])
+            case TypeRequest.REGISTRY:
+                if (data['REGISTRY'] and data['TYPE_USER'] and data['NAME'] and data['IP_ADDRESS'] and data['LATITUDE'] and data['LONGITUDE'] and data['MAC'] and data['DFP'] and data['OS'] and data['VERSION_OS'] and data['TIME']):
+                    return self.__requestRegistration(data, data['REGISTRY'], data['TYPE_USER'], data['NAME'], data['IP_ADDRESS'], data['LATITUDE'], data['LONGITUDE'], data['MAC'], data['DFP'], data['OS'], data['VERSION_OS'], data['TIME'])
             case _: # Default
                 return Response.ACCESS_DENIED, None
+            
+    def __requestRegistration(self, data, registry, typeUser, name, ipAddress, latitude, longitude, MAC, DFP, OS, versionOS, date): 
+        idDevice = self.pip.getDeviceIdByMAC(MAC)
+        if not idDevice:
+            self.pip.registerDevice(MAC, DFP, OS, versionOS, date)
+            idDevice = self.pip.getDeviceIdByMAC(MAC)
+
+        auxRegistration = registry + str(datetime.datetime.now()) + str(random.randint(1, 100000))
+        registryCode = hashlib.sha256(str(auxRegistration).encode('utf-8')).hexdigest()
+
+        userId = self.pip.registerUser(name, typeUser, registry, registryCode, date)
+        if not userId:
+            return Response.UNAUTHORIZED_REGISTRY, None
+
+        if typeUser == 'Profissional':
+            if not(data['POSITION'] and data['DAYS_WORK'] and data['START_WORKING_HOURS'] and data['END_WORKING_HOURS']):
+                return Response.UNAUTHORIZED_REGISTRY, None
+            
+            # TODO: Validar dados
+            position = data['POSITION']
+            daysWork = data['DAYS_WORK']
+            startWorkingHours = data['START_WORKING_HOURS']
+            endWorkingHours = data['END_WORKING_HOURS']
+
+            self.pip.registerProfessional(position, daysWork, userId, startWorkingHours, endWorkingHours)
+
+            if position == 'Médico':
+                self.pip.registerPermissionForDoctors(userId, date)
+            elif position == 'Enfermeiro':
+                self.pip.registerPermissionForNurse(userId, date)
+            elif position == 'Atendente':
+                self.pip.registerPermissionForAttendant(userId, date)
+            elif position == 'Administrador':
+                self.pip.registerPermissionForAdministrator(userId, date)
+        else:
+            self.pip.registerPatient(userId)
+
+            self.pip.registerPermissionForPatient(userId, date)
+
+
+        idpServer = {
+            # "idpIp": '192.168.56.1',
+            "idpIp": '169.254.0.3', 
+            "idpPort": 5001,
+            "registryCode": registryCode
+        }
+        return Response.AUTHORIZED_REGISTRY, idpServer
 
     def policyEngine(self, data):
         # Verifica se o usuário está devidamente autenticado

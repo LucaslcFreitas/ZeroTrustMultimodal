@@ -5,6 +5,7 @@ class RateLimiter:
     def __init__(self):
         self.request_log = defaultdict(list)
         self.limits = {
+            'register': (1, timedelta(minutes=1)),
             'authenticate': (10, timedelta(minutes=1)),
             'reauthenticate': (5, timedelta(minutes=1)),
             'logout': (10, timedelta(hours=1))
