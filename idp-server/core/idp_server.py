@@ -54,7 +54,6 @@ class IDPServer:
         return context
 
     def _handle_client(self, secure_socket, address):
-        logging.info("TTSS: before handle client")
         # Manipula uma conexão de cliente
         try:
             raw_data = ''
@@ -115,7 +114,6 @@ class IDPServer:
             secure_socket.send(json.dumps(error_msg).encode('utf-8'))
         finally:
             secure_socket.close()
-        logging.info("TTSS: after handle client")
 
     def start(self):
         # Inicia o servidor IDP

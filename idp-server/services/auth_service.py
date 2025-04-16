@@ -20,7 +20,6 @@ class AuthService:
         self.templates_dir = "biometric_templates"
 
     def register(self, authorization_code: str, registry: str, ppg_signal: list, ecg_signal: list, timestamp: str, device_id: str, client_ip: str):
-        logging.info("TTSS: before register")
         # Buscar user id no bd
         user_id = self.store_service.getUserIdToRegister(registry, authorization_code)
         if not user_id:
@@ -37,11 +36,9 @@ class AuthService:
         
         self.store_service.approveRegistry(registry, authorization_code)
         
-        logging.info("TTSS: after register")
         return True, {"status": "success"}
 
     def authenticate(self, authorization_code: str, registry: str, ppg_signal: list, ecg_signal: list, timestamp: str, device_id: str, client_ip: str):
-        logging.info("TTSS: before authenticate")
         # Buscar user id no bd
         user_id = self.store_service.getUserIdByRegistry(registry)
         if not user_id:
@@ -77,7 +74,6 @@ class AuthService:
         # Geração de tokens
         token = self.token_manager.generate_token(idRegLogin, user_id, device_id)
 
-        logging.info("TTSS: after authenticate")
         return True, {
             "token": token,
             "accuracy": auth_result['accuracy'],
@@ -151,8 +147,7 @@ class AuthService:
             logging.error(f"Erro no registro: {str(e)}")
             return False
 
-    def _biometric_auth(self, user_id: str, ppg_template, ecg_template, ppg_signal: list, ecg_signal: list):
-        logging.info("TTSS: before biometric auth")        
+    def _biometric_auth(self, user_id: str, ppg_template, ecg_template, ppg_signal: list, ecg_signal: list):      
         # Opter por receber os sinais já formatados momentâneamente
 
 
@@ -181,10 +176,9 @@ class AuthService:
         predict_ppg = self.md_cnn2_ppg.predict(lista_ppg)
         predict_ecg = self.md_cnn2_ecg.predict(lista_ecg)
 
-        logging.info("TTSS: predict ppg: " + str(predict_ppg[1]))
-        logging.info("TTSS: predict ecg: " + str(predict_ecg[1]))
+        logging.info("Predict ppg: " + str(predict_ppg[1]))
+        logging.info("Predict ecg: " + str(predict_ecg[1]))
 
-        logging.info("TTSS: after biometric auth")
         return {
             'authenticated': 'True',
             'accuracy': {
