@@ -12,6 +12,8 @@ DELETE FROM "zt-ehealth"."DispositivoTMP";
 
 DELETE FROM "zt-ehealth"."Permissao";
 
+DELETE FROM "zt-ehealth"."Senha";
+
 DELETE FROM "zt-ehealth"."Profissional";
 
 DELETE FROM "zt-ehealth"."Cliente";

@@ -14,7 +14,8 @@ def startAccess():
         PORT = int(os.getenv("PORT_ZERO_TRUST", 5000))
 
         # Dados dos usuários
-        users = {}
+        tokens = {}
+        passwords = {}
 
         # Operações de acesso
         operations_json = os.getenv("OPERATIONS") 
@@ -66,10 +67,10 @@ def startAccess():
                             data[key] = value
                         if data['RESULT'] == 'AUTHORIZED_REGISTRY':
                             if data['IDP_IP'] and data['IDP_PORT'] and data['REGISTRY_CODE']:
-                                resultRegistry = registry(data['IDP_IP'], data['IDP_PORT'], data['REGISTRY_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'])
+                                resultRegistry = registry(data['IDP_IP'], data['IDP_PORT'], data['REGISTRY_CODE'], access['REGISTRY'], access['PASSWORD'], access['TIME'], access['MAC'], access['DFP'])
                                 
                                 if resultRegistry['status'] == 'success':
-                                    print(users)
+                                    print(tokens)
                                 else:
                                     print('Failed to registry on IDP server')
                                     print(resultRegistry)
@@ -91,24 +92,30 @@ def startAccess():
                             key, value = line.split(' ', 1)
                             data[key] = value
                         if data['RESULT'] == 'AUTHENTICATION_REQUIRED' or data['RESULT'] == 'AUTHORIZED_LOGIN':
-                            if data['IDP_IP'] and data['IDP_PORT'] and data['AUTHORIZATION_CODE']:
-                                resultLogin = login(data['IDP_IP'], data['IDP_PORT'], data['AUTHORIZATION_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'])
+                            if data['IDP_IP'] and data['IDP_PORT'] and data['AUTHORIZATION_CODE'] and data['TYPE_LOGIN']:
+                                if data['TYPE_LOGIN'] == 'password':
+                                    resultLogin = login('authenticate', data['TYPE_LOGIN'], data['IDP_IP'], data['IDP_PORT'], data['AUTHORIZATION_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'], access['PASSWORD'])
+                                else:
+                                    resultLogin = login('authenticate', data['TYPE_LOGIN'], data['IDP_IP'], data['IDP_PORT'], data['AUTHORIZATION_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'], '')
                                 
                                 if resultLogin['status'] == 'success' and resultLogin['token']:
-                                    users[access['REGISTRY']] = resultLogin['token']
-                                    print(users)
+                                    tokens[access['REGISTRY']] = resultLogin['token']
+                                    if data['TYPE_LOGIN'] == 'password':
+                                        passwords[access['REGISTRY']] = access['PASSWORD']
+                                    print(tokens)
                                 else:
                                     print('Failed to login on IDP server')
+                                    print(resultLogin)
                                     break
                             else:
                                 print("Login error")
                                 break
-                        elif access['REGISTRY'] in users and users[access['REGISTRY']] != None:
+                        elif access['REGISTRY'] in tokens and tokens[access['REGISTRY']] != None:
                             print("Login error")
                             break
                     
                     case 'ACCESS':
-                        message = getAccess(access['RESOURCE'], access['SUB_RESOURCE'], access['TYPE_ACTION'], users[access['REGISTRY']], access['IP_ADDRESS'], access['LATITUDE'], access['LONGITUDE'], access['MAC'], access['DFP'], access['OS'],  access['VERSION_OS'], access['TIME'])
+                        message = getAccess(access['RESOURCE'], access['SUB_RESOURCE'], access['TYPE_ACTION'], tokens[access['REGISTRY']], access['IP_ADDRESS'], access['LATITUDE'], access['LONGITUDE'], access['MAC'], access['DFP'], access['OS'],  access['VERSION_OS'], access['TIME'])
                                                 
                         time_start = time.time()
 
@@ -129,12 +136,14 @@ def startAccess():
                         # access_count += 1
 
                         if data['RESULT'] == "AUTHENTICATION_REQUIRED":
-                            if data['IDP_IP'] and data['IDP_PORT'] and data['AUTHORIZATION_CODE']:
-                                resultLogin = login(data['IDP_IP'], data['IDP_PORT'], data['AUTHORIZATION_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'])
+                            if data['IDP_IP'] and data['IDP_PORT'] and data['AUTHORIZATION_CODE'] and data['TYPE_LOGIN']:
+                                resultLogin = login('authenticate', data['TYPE_LOGIN'], data['IDP_IP'], data['IDP_PORT'], data['AUTHORIZATION_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'], passwords[access['REGISTRY']])
 
                                 if resultLogin['status'] == 'success' and resultLogin['token']:
-                                    users[access['REGISTRY']] = resultLogin['token']
-                                    message = getAccess(access['RESOURCE'], access['SUB_RESOURCE'], access['TYPE_ACTION'], users[access['REGISTRY']], access['IP_ADDRESS'], access['LATITUDE'], access['LONGITUDE'], access['MAC'], access['DFP'], access['OS'], access['VERSION_OS'], access['TIME'])
+                                    tokens[access['REGISTRY']] = resultLogin['token']
+                                    if data['TYPE_LOGIN'] == 'password':
+                                        passwords[access['REGISTRY']] = access['PASSWORD']
+                                    message = getAccess(access['RESOURCE'], access['SUB_RESOURCE'], access['TYPE_ACTION'], tokens[access['REGISTRY']], access['IP_ADDRESS'], access['LATITUDE'], access['LONGITUDE'], access['MAC'], access['DFP'], access['OS'], access['VERSION_OS'], access['TIME'])
                                 
                                     conn.sendall(message.encode('utf-8'))
                                     data = conn.recv(1024)
@@ -147,13 +156,13 @@ def startAccess():
                                 break
 
                         if data['RESULT'] == "REAUTHENTICATION_REQUIRED" and access['REAUTHENTICATE']:
-                            if data['IDP_IP'] and data['IDP_PORT'] and data['AUTHORIZATION_CODE']:
-                                resultLogin = login(data['IDP_IP'], data['IDP_PORT'], data['AUTHORIZATION_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'])
+                            if data['IDP_IP'] and data['IDP_PORT'] and data['AUTHORIZATION_CODE'] and data['TYPE_LOGIN']:
+                                resultLogin = login('reauthenticate', data['TYPE_LOGIN'], data['IDP_IP'], data['IDP_PORT'], data['AUTHORIZATION_CODE'], access['REGISTRY'], access['TIME'], access['MAC'], access['DFP'], passwords[access['REGISTRY']])
 
                                 if resultLogin['status'] == 'success' and resultLogin['token']:
-                                    users[access['REGISTRY']] = resultLogin['token']
+                                    tokens[access['REGISTRY']] = resultLogin['token']
 
-                                    message = getReauthenticate(users[access['REGISTRY']], access['REGISTRY'], access['IP_ADDRESS'], access['LATITUDE'], access['LONGITUDE'], access['MAC'], access['DFP'], access['OS'], access['VERSION_OS'], access['TIME'])
+                                    message = getReauthenticate(tokens[access['REGISTRY']], access['REGISTRY'], access['IP_ADDRESS'], access['LATITUDE'], access['LONGITUDE'], access['MAC'], access['DFP'], access['OS'], access['VERSION_OS'], access['TIME'])
                                                         
                                     conn.sendall(message.encode('utf-8'))
                                     data = conn.recv(1024)
@@ -161,6 +170,7 @@ def startAccess():
                                     print(response)
                                 else:
                                     print('Failed to login on IDP server after reauthenticate')
+                                    print(resultLogin)
                             else:
                                 print("Access error on reauthentication")
                                 break
@@ -176,7 +186,7 @@ def startAccess():
 
     print('Closed connection')
 
-def registry(idpIp, idpPort, registryCode, registry, time, MAC, DFP):
+def registry(idpIp, idpPort, registryCode, registry, password, time, MAC, DFP):
     if idpIp and idpPort and registryCode:
         idpConnection = createIdpConnection(idpIp, int(idpPort))
 
@@ -184,6 +194,7 @@ def registry(idpIp, idpPort, registryCode, registry, time, MAC, DFP):
             'endpoint': 'register',
             'registry': registry,
             'server_authorization_code': registryCode,
+            'password': password,
             'device_mac': MAC,
             'device_fp': DFP,
             'ppg_signal': [[0.17254901960784316, 0.17500000000000002, 0.17794117647058824, 0.1803921568627451, 0.182843137254902, 0.1857843137254902, 0.18823529411764706, 0.1897058823529412, 0.19068627450980397, 0.19215686274509805, 0.1946078431372549, 0.19754901960784316, 0.2, 0.20147058823529415, 0.20245098039215687, 0.203921568627451, 0.20637254901960786, 0.2093137254901961, 0.21176470588235297, 0.21176470588235297, 0.21176470588235297, 0.21176470588235297, 0.21176470588235297, 0.21176470588235297, 0.21176470588235297, 0.21568627450980396, 0.21960784313725493, 0.22352941176470592, 0.23382352941176474, 0.24460784313725492, 0.25490196078431376, 0.2705882352941177, 0.2862745098039216, 0.3019607843137255, 0.3308823529411765, 0.35931372549019613, 0.38823529411764707, 0.421078431372549, 0.45343137254901966, 0.4862745098039216, 0.5176470588235295, 0.5490196078431373, 0.5803921568627451, 0.6102941176470589, 0.640686274509804, 0.6705882352941177, 0.6941176470588236, 0.7176470588235295, 0.7411764705882354, 0.7583333333333333, 0.7750000000000001, 0.7921568627450981, 0.802450980392157, 0.8132352941176471, 0.823529411764706, 0.828921568627451, 0.8338235294117646, 0.8392156862745099, 0.8416666666666668, 0.844607843137255, 0.8470588235294119, 0.844607843137255, 0.8416666666666668, 0.8392156862745099, 0.8338235294117646, 0.828921568627451, 0.823529411764706, 0.815686274509804, 0.8078431372549021, 0.8, 0.7921568627450981, 0.7843137254901962, 0.7764705882352941, 0.7686274509803922, 0.7607843137254903, 0.7529411764705882, 0.7450980392156863, 0.7372549019607844, 0.7294117647058823, 0.7200980392156864, 0.7112745098039216, 0.7019607843137255, 0.6955882352941177, 0.6887254901960785, 0.6823529411764706, 0.6759803921568628, 0.6691176470588236, 0.6627450980392157, 0.6573529411764707, 0.652450980392157, 0.6470588235294118, 0.6416666666666667, 0.636764705882353, 0.6313725490196079, 0.6259803921568627, 0.621078431372549, 0.615686274509804, 0.6102941176470589, 0.6053921568627452, 0.6000000000000001, 0.5936274509803922, 0.586764705882353, 0.5803921568627451, 0.5750000000000001, 0.5700980392156864, 0.5647058823529412, 0.5593137254901961, 0.5544117647058824, 0.5490196078431373, 0.5436274509803922, 0.5387254901960785, 0.5333333333333334, 0.5308823529411765, 0.5279411764705882, 0.5254901960784314, 0.5230392156862745, 0.5200980392156863, 0.5176470588235295, 0.5161764705882353, 0.5151960784313726],
@@ -205,24 +216,36 @@ def registry(idpIp, idpPort, registryCode, registry, time, MAC, DFP):
         print('Missing idpIp, idpPort or authorizationCode from ZT server')
         return None
 
-def login(idpIp, idpPort, authorizationCode, registry, time, MAC, DFP):
+def login(endpoint, typeLogin, idpIp, idpPort, authorizationCode, registry, time, MAC, DFP, password):
     if idpIp and idpPort and authorizationCode:
         idpConnection = createIdpConnection(idpIp, int(idpPort))
 
         ppgSignal = getPPGSignal()
         ecgSignal = getECGSignal()
 
-        idpRequest = {
-            'endpoint': 'authenticate',
-            'registry': registry,
-            'server_authorization_code': authorizationCode,
-            'device_ioht_cert': '1234',
-            'device_mac': MAC,
-            'device_fp': DFP,
-            'ppg_signal': ppgSignal,
-            'ecg_signal': ecgSignal,
-            'timestamp': time
-        }
+        if typeLogin == 'biometric':
+            idpRequest = {
+                'endpoint': endpoint,
+                'type_login': typeLogin,
+                'registry': registry,
+                'server_authorization_code': authorizationCode,
+                'device_mac': MAC,
+                'device_fp': DFP,
+                'ppg_signal': ppgSignal,
+                'ecg_signal': ecgSignal,
+                'timestamp': time
+            }
+        else:
+            idpRequest = {
+                'endpoint': endpoint,
+                'type_login': typeLogin,
+                'registry': registry,
+                'server_authorization_code': authorizationCode,
+                'device_mac': MAC,
+                'device_fp': DFP,
+                'password': password,
+                'timestamp': time
+            }
 
         idpConnection.sendall((json.dumps(idpRequest) + "\0").encode('utf-8'))
 
@@ -235,6 +258,7 @@ def login(idpIp, idpPort, authorizationCode, registry, time, MAC, DFP):
         return None
 
 def createIdpConnection(idpIp, idpPort):
+    # idpIp = '192.168.1.76'
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
@@ -395,11 +419,11 @@ def getUpdatePassword(token, oldPassword, newPassword, ip, latitude, longitude, 
     message += "TIME " + time + "\n"
     return message
 
-# def getFakeOperations():
-#     with open(os.path.dirname(os.path.abspath(__file__)) +"/scenarios/instance-C1.json") as f:
-#         clients = json.load(f)
+def getFakeOperations():
+    with open(os.path.dirname(os.path.abspath(__file__)) +"/scenarios/instance-C1.json") as f:
+        clients = json.load(f)
 
-#         return json.dumps(clients[0]["OPERATIONS"])
+        return json.dumps(clients[0]["OPERATIONS"])
     
 if __name__ == '__main__':
     print("Start")

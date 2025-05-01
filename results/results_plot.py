@@ -50,7 +50,7 @@ def showResults():
         # if access[9] >= datetime.datetime.strptime("2023-06-15 15:19:00.047062", "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=datetime.timezone(datetime.timedelta(hours=-3))): # instance C6
         if True:
             x_sensibility.append(access[9] - datetime.timedelta(hours=3))
-            y_sensibility.append(access[15])
+            y_sensibility.append(access[18])
             if access[10] == 'Permitido' and access[14] == False:
                 x_dataAllowedNormal.append(access[9] - datetime.timedelta(hours=3))
                 y_dataAllowedNormal.append(access[12])

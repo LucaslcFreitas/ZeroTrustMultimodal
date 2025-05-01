@@ -102,7 +102,7 @@ class PolicyEnforcementPoint:
                 case Response.AUTHENTICATION_REQUIRED:
                     if body["idpIp"] and body["idpPort"] and body["authorizationCode"]:
                         logging.info(f'Redirect login for {addr}')
-                        result = "AUTHENTICATION_REQUIRED\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + body["idpPort"] + "\nAUTHORIZATION_CODE " + body["authorizationCode"]
+                        result = "AUTHENTICATION_REQUIRED\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + body["idpPort"] + "\nAUTHORIZATION_CODE " + body["authorizationCode"] + "\nTYPE_LOGIN " + body["typeLogin"]
                         conn.sendall(result.encode('utf-8'))
                     else :
                         logging.error(f'Login error for {addr}')
@@ -117,7 +117,7 @@ class PolicyEnforcementPoint:
                         logging.info(f'Reauthentication required for {addr}')   
                         opReauthentication["inReauthentication"] = True
                         opReauthentication["idAccess"] = body["idAccess"]
-                        result = "REAUTHENTICATION_REQUIRED\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + str(body["idpPort"]) + "\nAUTHORIZATION_CODE " + body["authorizationCode"]
+                        result = "REAUTHENTICATION_REQUIRED\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + str(body["idpPort"]) + "\nAUTHORIZATION_CODE " + body["authorizationCode"] + "\nTYPE_LOGIN " + body["typeLogin"]
                         conn.sendall(result.encode('utf-8'))
                     else:
                         logging.error(f'Internal server error')
@@ -149,7 +149,7 @@ class PolicyEnforcementPoint:
                 case Response.AUTHORIZED_LOGIN:
                     if body["idpIp"] and body["idpPort"] and body["authorizationCode"]:
                         logging.info(f'Redirect login for {addr}')
-                        result = "AUTHORIZED_LOGIN\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + str(body["idpPort"]) + "\nAUTHORIZATION_CODE " + body["authorizationCode"]
+                        result = "AUTHORIZED_LOGIN\nIDP_IP " + body["idpIp"] + "\nIDP_PORT " + str(body["idpPort"]) + "\nAUTHORIZATION_CODE " + body["authorizationCode"] + "\nTYPE_LOGIN " + body["typeLogin"]
                         conn.sendall(result.encode('utf-8'))
                     else :
                         logging.error(f'Login error for {addr}')

@@ -2,6 +2,7 @@ import psycopg2
 import os
 import json
 import datetime
+import logging
 
 class StoreService:
     config = {
@@ -50,7 +51,7 @@ class StoreService:
                 return None
 
         except Exception as e:
-            print(e)
+            logging.info(e)
             return None
         
     def getUserIdToRegister(self, registry, authorization_code):
@@ -59,16 +60,16 @@ class StoreService:
 
         try: 
             with self.connection.cursor() as cursor:
-                print("Select id to register")
+                logging.info("Select id to register")
                 cursor.execute("SELECT id FROM \"zt-ehealth\".\"Usuario\" WHERE cpf = '"+registry+"' AND \"codigoCriacao\" = '"+authorization_code+"' AND ativado = 'false'")
                 result = cursor.fetchone()
-                print(result)
+                logging.info(result)
                 if result:
                     return result[0]
                 return None
 
         except Exception as e:
-            print(e)
+            logging.info(e)
             return None
         
     def approveRegistry(self, registry, authorization_code):
@@ -86,32 +87,16 @@ class StoreService:
                 return False
 
         except Exception as e:
-            print(e)
-            return None
-
-    def validityRegLoginByAuthorizationCode(self, user_id, authorization_code):
-        if not self.connection:
-            self.connect()
-
-        try:
-            with self.connection.cursor() as cursor:
-                cursor.execute("SELECT id FROM \"zt-ehealth\".\"RegLogin\" WHERE \"idUsuario\" = '"+str(user_id)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"' AND completado = 'false'")
-                result = cursor.fetchone()
-                if result:
-                    return result[0]
-                return None
-
-        except Exception as e:
-            print(e)
+            logging.info(e)
             return None
         
-    def updateRegLogin(self, id_reg_login, decision, authorization_code, score_ppg, score_ecg):
+    def registerPassword(self, user_id, password_hash, timestamp, status):
         if not self.connection:
             self.connect()
 
-        try:
+        try: 
             with self.connection.cursor() as cursor:
-                cursor.execute("UPDATE \"zt-ehealth\".\"RegLogin\" SET resultado = '"+str(decision)+"', completado='True', \"_ppg= '"+str(score_ppg)+"', \"scoreECG\" = '"+str(score_ecg)+"' WHERE id = '"+str(id_reg_login)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"'")
+                cursor.execute("INSERT INTO \"zt-ehealth\".\"Senha\"(senha, \"idUsuario\", \"dataCriacao\", status) VALUES ('"+password_hash+"', '"+str(user_id)+"', '"+timestamp+"', '"+status+"')")
                 updated = cursor.rowcount
 
                 self.connection.commit()
@@ -119,6 +104,76 @@ class StoreService:
                     return True
                 return False
 
+        except Exception as e:
+            logging.info(e)
+            return None
+
+    def validityRegLoginByAuthorizationCode(self, user_id, authorization_code, type_login):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"RegLogin\" WHERE \"idUsuario\" = '"+str(user_id)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"' AND \"tipoLogin\" = '"+type_login+"' AND completado = 'false'")
+                result = cursor.fetchone()
+                if result:
+                    return result[0]
+                return None
+
+        except Exception as e:
+            logging.info(e)
+            return None
+        
+    def updateRegLoginForBiometric(self, id_reg_login, decision, authorization_code, score_ppg, score_ecg):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("UPDATE \"zt-ehealth\".\"RegLogin\" SET \"resultado\" = '"+str(decision)+"', \"completado\" = 'True', \"scorePPG\" = '"+str(score_ppg)+"', \"scoreECG\" = '"+str(score_ecg)+"' WHERE id = '"+str(id_reg_login)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"'")
+                updated = cursor.rowcount
+
+                self.connection.commit()
+                if updated > 0:
+                    return True
+                return False
+
+        except Exception as e:
+            logging.info(e)
+            return None
+        
+    def updateRegLoginForPassword(self, id_reg_login, decision, authorization_code, id_password):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                if decision == 'Permitido':
+                    cursor.execute("UPDATE \"zt-ehealth\".\"RegLogin\" SET \"resultado\" = '"+str(decision)+"', \"completado\" = 'True', \"idSenha\" = '"+str(id_password)+"' WHERE id = '"+str(id_reg_login)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"'")
+                else:
+                    cursor.execute("UPDATE \"zt-ehealth\".\"RegLogin\" SET \"resultado\" = '"+str(decision)+"', \"completado\" = 'True' WHERE id = '"+str(id_reg_login)+"' AND \"codigoAutorizacao\" = '"+authorization_code+"'")
+                updated = cursor.rowcount
+
+                self.connection.commit()
+                if updated > 0:
+                    return True
+                return False
+
+        except Exception as e:
+            logging.info(e)
+            return None
+        
+    def checkLoginByPassword(self, idUser, password_hash):
+        if not self.connection:
+            self.connect()
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM \"zt-ehealth\".\"Senha\" WHERE senha = '"+password_hash+"' AND \"idUsuario\" = '"+str(idUser)+"' AND status = 'Ativo'")
+                result = cursor.fetchone()
+                if result:
+                    return result[0]
+                return None
         except Exception as e:
             print(e)
             return None
@@ -139,7 +194,7 @@ class StoreService:
                 return False
 
         except Exception as e:
-            print(e)
+            logging.info(e)
             return None
         
     def getDeviceIdByCode(self, authorization_code):
@@ -155,7 +210,7 @@ class StoreService:
                 return None
 
         except Exception as e:
-            print(e)
+            logging.info(e)
             return None
     
     def getDeviceIdByMac(self, MAC):
@@ -171,5 +226,5 @@ class StoreService:
                 return None
 
         except Exception as e:
-            print(e)
+            logging.info(e)
             return None

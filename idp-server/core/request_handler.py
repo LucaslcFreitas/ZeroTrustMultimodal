@@ -49,6 +49,7 @@ class RequestHandler:
         result, data = self.auth_service.register(
             request_data['server_authorization_code'],
             request_data['registry'],
+            request_data['password'],
             request_data['ppg_signal'],
             request_data['ecg_signal'],
             request_data['timestamp'],
@@ -62,21 +63,43 @@ class RequestHandler:
 
     def _handle_authenticate(self, request_data: Dict, device_id: str, client_ip: str) -> Dict:
         # Processa autenticação
-        result, data = self.auth_service.authenticate(
-            request_data['server_authorization_code'],
-            request_data['registry'],
-            request_data['ppg_signal'],
-            request_data['ecg_signal'],
-            request_data['timestamp'],
-            device_id,
-            client_ip
-        )
+        result = None
+        data = None
+        if request_data['type_login'] == 'biometric':
+            result, data = self.auth_service.authenticate(
+                request_data['server_authorization_code'],
+                request_data['type_login'],
+                request_data['registry'],
+                '',
+                request_data['ppg_signal'],
+                request_data['ecg_signal'],
+                request_data['timestamp'],
+                device_id,
+                client_ip
+            )
+        else:
+            result, data = self.auth_service.authenticate(
+                request_data['server_authorization_code'],
+                request_data['type_login'],
+                request_data['registry'],
+                request_data['password'],
+                [],
+                [],
+                request_data['timestamp'],
+                device_id,
+                client_ip
+            )
         
         if result:
+            if request_data['type_login'] == 'biometric':
+                return {
+                    'status': 'success',
+                    'token': data['token'],
+                    'accuracy': data['accuracy']
+                }
             return {
                 'status': 'success',
-                'token': data['token'],
-                'accuracy': data['accuracy']
+                'token': data['token']
             }
         return {'status': 'error', **data}
     
