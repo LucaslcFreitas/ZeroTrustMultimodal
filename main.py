@@ -3,6 +3,8 @@ import json
 import reset
 import os
 import results.results_plot as plot
+from random_access.instance_random_normal import getRandomNormal
+from random_access.instance_random_improper_user import getRandomImproperUser
 
 dkr = docker.from_env()
 
@@ -35,28 +37,10 @@ def startClients():
     while option != 13:
         match option:
             case "1":
-                instanceName = "instance-C1.json"
-            # case "2":
-            #     instanceName = "instance-C2T1.json"
-            # case "3":
-            #     instanceName = "instance-C2T2.json"
-            # case "4":
-            #     instanceName = "instance-C3.json"
-            # case "5":
-            #     instanceName = "instance-C4T1.json"
-            # case "6":
-            #     instanceName = "instance-C4T2.json"
-            # case "7":
-            #     instanceName = "instance-C5.json"
-            # case "8":
-            #     instanceName = "instance-C6T1.json"
-            # case "9":
-            #     instanceName = "instance-C6T2.json"
-            # case "10":
-            #     instanceName = "instance-C6T3.json"
-            # case "11":
-            #     instanceName = "instance-C6T4.json"
-            case "12":
+                instanceName = "randomNormal"
+            case "2":
+                instanceName = "randomImproperUser"
+            case "13":
                 exit()
             case _:
                 print("Opção Inválida!")
@@ -64,8 +48,10 @@ def startClients():
         if instanceName != "":
             break
 
-    with open(f"clients/scenarios/{instanceName}") as f:
-        clients = json.load(f)
+    if instanceName == "randomNormal":
+        clients = getRandomNormal(200)
+    elif instanceName == "randomImproperUser":
+        clients = getRandomImproperUser(200)
 
 
     for idx, client in enumerate(clients):
@@ -76,7 +62,8 @@ def startClients():
             environment={
                 "IP_ZERO_TRUST": "169.254.0.2",
                 "PORT_ZERO_TRUST": "5000",
-                "OPERATIONS": json.dumps(client["OPERATIONS"])
+                "OPERATIONS": json.dumps(client["OPERATIONS"]),
+                "USERS": json.dumps(client["USERS"])
             },
             network="zero_trust"
         )
@@ -88,19 +75,9 @@ def startClients():
 
 def printMenu():
     print("SELECIONE O CENÁRIO:")
-    print("Temporariamente limitado")
-    print("1 - Cenário 1 - Acesso Normal")
-    # print("2 - Cenário 2 - Roubo de Token - Teste 1")
-    # print("3 - Cenário 2 - Roubo de Token - Teste 2")
-    # print("4 - Cenário 3 - Roubo de Credenciais")
-    # print("5 - Cenário 4 - Ataque de Força Bruta - Sem Sucesso")
-    # print("6 - Cenário 4 - Ataque de Força Bruta - Com Sucesso")
-    # print("7 - Cenário 5 - Dispositivo Compartilhado")
-    # print("8 - Cenário 6 - Acesso fora do Horário - Teste 1")
-    # print("9 - Cenário 6 - Acesso fora do Horário - Teste 2")
-    # print("10 - Cenário 6 - Acesso fora do Horário - Teste 3")
-    # print("11 - Cenário 6 - Acesso fora do Horário - Teste 4")
-    print("12 - SAIR")
+    print("1 - Random Normal")
+    print("2 - Usuário Indevido")
+    print("13 - SAIR")
 
 if __name__ == "__main__":
     startClients()

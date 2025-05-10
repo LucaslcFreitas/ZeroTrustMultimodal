@@ -35,8 +35,8 @@ class RequestHandler:
             return {'status': 'error', 'message': error}
         
         # Rate limiting
-        if not self.rate_limiter.check_limit(client_ip, endpoint, request_data['timestamp']):
-            return {'status': 'error', 'message': 'Too many requests'}
+        # if not self.rate_limiter.check_limit(client_ip, endpoint, request_data['timestamp']):
+        #     return {'status': 'error', 'message': 'Too many requests'}
         
         # handler do endpoint
         handler = getattr(self, f'_handle_{endpoint}', None)

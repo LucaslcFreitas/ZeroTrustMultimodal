@@ -1,0 +1,185 @@
+{
+    "veryLowSensivity": [
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes do Plano de Saude",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Agendamentos de consultas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Agendamentos de consultas",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Mensagens da Equipe",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Leitura"
+        }
+    ],    
+    "lowSensivity": [
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Pagamento",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registro de Internacao/Alta",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados Financeiros",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Medicacoes em Uso",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Agendamentos de consultas",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Agendamentos de consultas",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Prontuario Eletronico",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Historico de Consultas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Leitura"
+        }
+    ],    
+    "mediumSensivity": [
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados Financeiros",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes de Consentimento",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Consentimento",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados Financeiros",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Pagamento",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Relatorios Administrativos",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Exclusao"
+        }
+    ],    
+    "highSensivity": [
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Pagamento",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Pagamento",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Historico de Consultas",
+            "TYPE_ACTION": "Escrita"
+        }
+    ]
+}

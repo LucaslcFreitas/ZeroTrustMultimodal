@@ -1,0 +1,185 @@
+{
+    "veryLowSensivity": [
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registros Cadastrais da Enfermagem",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Mensagens da Equipe",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Exclusao"
+        }
+    ],    
+    "lowSensivity": [
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados de Recursos Humanos",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registro de Estoque",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados Financeiros",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Procedimentos Cirurgicos",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Controle de Medicamentos",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Controle de Medicamentos",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Mensagens da Equipe",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Leitura"
+        }
+    ],    
+    "mediumSensivity": [
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados Financeiros",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registros Cadastrais da Enfermagem",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados de Recursos Humanos",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados de Recursos Humanos",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados de Recursos Humanos",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registros Cadastrais da Enfermagem",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registros Cadastrais da Enfermagem",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados Financeiros",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Dados Financeiros",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Controle de Medicamentos",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Controle de Medicamentos",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Relatorios Administrativos",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Mensagens da Equipe",
+            "TYPE_ACTION": "Modificacao"
+        }
+    ],    
+    "highSensivity": [
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registro de Estoque",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registro de Estoque",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registro de Estoque",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Relatorios Administrativos",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Relatorios Administrativos",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Relatorios Administrativos",
+            "TYPE_ACTION": "Exclusao"
+        }
+    ]
+}

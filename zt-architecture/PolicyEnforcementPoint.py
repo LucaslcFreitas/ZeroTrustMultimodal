@@ -131,6 +131,7 @@ class PolicyEnforcementPoint:
                         responseResource = "REAUTHENTICATION_ALLOWED\nRESPONSE " + sockResource.recv(1024).decode('utf-8')
                         conn.sendall(responseResource.encode('utf-8'))
                         sockResource.close()
+
                         opReauthentication["inReauthentication"] = False
                         opReauthentication["idAccess"] = None
                     else:

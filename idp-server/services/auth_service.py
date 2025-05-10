@@ -7,6 +7,8 @@ import os
 import logging
 import random
 import hashlib
+from keras import activations
+import tensorflow as tf
 
 class AuthService:
     def __init__(self, token_manager: TokenManager, signal_validator: SignalValidator, store_service: StoreService, md_cnn1_ppg, md_cnn1_ecg, md_cnn2_ppg, md_cnn2_ecg):
@@ -136,7 +138,7 @@ class AuthService:
         # Store result authentication
         self.store_service.updateRegLoginForBiometric(idRegLogin, auth_result['authenticated'], authorization_code, auth_result['accuracy']['ppg'], auth_result['accuracy']['ecg'])
         
-        if not auth_result['authenticated']:
+        if auth_result['authenticated'] == 'Negado':
             return False, {"error": "Biometric authentication failed", "accuracy": auth_result['accuracy']}
         
         # Geração de tokens
@@ -190,13 +192,10 @@ class AuthService:
     def _biometric_auth(self, user_id: str, ppg_template, ecg_template, ppg_signal: list, ecg_signal: list):     
         # Opter por receber os sinais já formatados momentâneamente
 
-        # ppg_array = np.array([ppg_signal])
-        # ppg_array = np.expand_dims(ppg_array, axis=2)
-        # ecg_array = np.array([ecg_signal])
-        # ecg_array = np.expand_dims(ecg_array, axis=2)
-
-        ppg_array = np.array(ppg_signal).reshape(1, 120, 1)
-        ecg_array = np.array(ecg_signal).reshape(1, 120, 1)
+        ppg_array = np.array(ppg_signal)
+        ppg_array = np.expand_dims(ppg_array, axis=2)
+        ecg_array = np.array(ecg_signal)
+        ecg_array = np.expand_dims(ecg_array, axis=2)
         
         ppg_features = self.md_cnn1_ppg.predict(ppg_array)
         ecg_features = self.md_cnn1_ecg.predict(ecg_array)
@@ -206,10 +205,11 @@ class AuthService:
         lista_ecg = []
         for template_ppg, template_ecg in zip(ppg_template, ecg_template):
             # Prepara pares para CNN2
-            X_ppg = np.array([template_ppg, ppg_features[0]])
-            lista_ppg.append(X_ppg)
-            X_ecg = np.array([template_ecg, ecg_features[0]])
-            lista_ecg.append(X_ecg)
+            for i in range(2):
+                X_ppg = np.array([template_ppg, ppg_features[i]])
+                lista_ppg.append(X_ppg)
+                X_ecg = np.array([template_ecg, ecg_features[i]])
+                lista_ecg.append(X_ecg)
             
         lista_ppg = np.array(lista_ppg)
         lista_ppg = np.expand_dims(lista_ppg, axis=3)
@@ -223,21 +223,47 @@ class AuthService:
         logging.info("Predict ppg: " + str(predict_ppg[1]))
         logging.info("Predict ecg: " + str(predict_ecg[1]))
 
-        fake_ppg = self.generate_fake_precision()
-        fake_ecg = self.generate_fake_precision()
-        logging.info("Fake ppg: " + str(fake_ppg))
-        logging.info("Fake ecg: " + str(fake_ecg))
+        ppg_sof = activations.softmax(tf.convert_to_tensor(predict_ppg)).numpy()
+        ecg_sof = activations.softmax(tf.convert_to_tensor(predict_ecg)).numpy()
+
+        ppg_result = ppg_sof[0][1] + ppg_sof[1][1] + ppg_sof[2][1] + ppg_sof[3][1] + ppg_sof[4][1] + ppg_sof[5][1] + ppg_sof[6][1] + ppg_sof[7][1] + ppg_sof[8][1] + ppg_sof[9][1] + ppg_sof[10][1] + ppg_sof[11][1]
+        ppg_result = (ppg_result / 12) * 100
+        ecg_result = ecg_sof[0][1] + ecg_sof[1][1] + ecg_sof[2][1] + ecg_sof[3][1] + ecg_sof[4][1] + ecg_sof[5][1] + ecg_sof[6][1] + ecg_sof[7][1] + ecg_sof[8][1] + ecg_sof[9][1] + ecg_sof[10][1] + ecg_sof[11][1]
+        ecg_result = (ecg_result / 12) * 100
+
+        logging.info("PPG: " + str(ppg_result))
+        logging.info("ECG: " + str(ecg_result))
+
+        # fake_ppg = self.generate_fake_precision()
+        # fake_ecg = self.generate_fake_precision()
+        # logging.info("Fake ppg: " + str(fake_ppg))
+        # logging.info("Fake ecg: " + str(fake_ecg))
 
         return {
-            'authenticated': 'Permitido' if ((fake_ppg + fake_ecg) /2) > 80 else 'Negado',
+            'authenticated': 'Permitido' if self._is_authenticated(ppg_result, ecg_result) else 'Negado',
             'accuracy': {
-                'ppg': fake_ppg,
-                'ecg': fake_ecg
+                'ppg': ppg_result,
+                'ecg': ecg_result
             }
         }
+        # return {
+        #     'authenticated': 'Permitido' if self._is_authenticated(fake_ppg, fake_ecg) else 'Negado',
+        #     'accuracy': {
+        #         'ppg': ppg_result,
+        #         'ecg': ecg_result
+        #     }
+        # }
+    
+    def _is_authenticated(self, ppg_score, ecg_score):
+        if ppg_score > 70 or ecg_score > 70:
+            return True
+        average = (ppg_score + ecg_score) / 2
+        if average > 75:
+            return True
+        return False
     
     def generate_fake_precision(self):
-        return round(random.uniform(80, 100), 2)
-        # if random.random() < 0.8:
-        # else:
-        #     return round(random.uniform(75, 80), 2)
+        if random.random() < 0.80:
+            return round(random.uniform(80, 100), 2)
+        else:
+            return round(random.uniform(75, 80), 2)

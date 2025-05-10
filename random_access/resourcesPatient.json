@@ -1,0 +1,290 @@
+{
+    "veryLowSensivity": [
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Agendamentos de consultas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Monitoramento Remoto do Paciente",
+            "SUB_RESOURCE": "Dados de Monitoramento de Atividades Fisicas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes do Plano de Saude",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Exclusao"
+        }
+    ],    
+    "lowSensivity": [
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Dados de Imunizacao",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Registro de Alergias",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Prescricoes Medicas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Medicacoes em Uso",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Procedimentos Cirurgicos",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Sistema de Informacao Hospitalar",
+            "SUB_RESOURCE": "Registro de Internacao/Alta",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Monitoramento Remoto do Paciente",
+            "SUB_RESOURCE": "Registro de Sinais Vitais",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Monitoramento Remoto do Paciente",
+            "SUB_RESOURCE": "Dados de Monitoramento de Atividades Fisicas",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Pagamento",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Historico de Consultas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Feedbacks e Avaliacoes",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Prescricoes Digitais",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Laudos a Distancia",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Leitura"
+        }
+    ],    
+    "mediumSensivity": [
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Notas Clinicas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Historico Medico",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Registro de Alergias",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Resultados Laboratoriais",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes de Consentimento",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Medicacoes em Uso",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Medicacoes em Uso",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Monitoramento Remoto do Paciente",
+            "SUB_RESOURCE": "Registro de Sinais Vitais",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Monitoramento Remoto do Paciente",
+            "SUB_RESOURCE": "Dados de Analise de Tendencia",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Monitoramento Remoto do Paciente",
+            "SUB_RESOURCE": "Historico de Monitoramento",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Notas Clinicas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Pagamento",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Consentimento",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Informacoes Cadastrais do Cliente",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Gravacoes de Consultas",
+            "TYPE_ACTION": "Leitura"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Gravacoes de Consultas",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Chat",
+            "TYPE_ACTION": "Exclusao"
+        }
+    ],    
+    "highSensivity": [
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes de Consentimento",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Informacoes de Consentimento",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Medicacoes em Uso",
+            "TYPE_ACTION": "Exclusao"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Registro Eletronico de Saude",
+            "SUB_RESOURCE": "Documentos Assinados",
+            "TYPE_ACTION": "Modificacao"
+        },
+        {
+            "RESOURCE": "Portal do Paciente",
+            "SUB_RESOURCE": "Informacoes de Consentimento",
+            "TYPE_ACTION": "Escrita"
+        },
+        {
+            "RESOURCE": "Telemedicina",
+            "SUB_RESOURCE": "Videoconsulta",
+            "TYPE_ACTION": "Acesso"
+        }
+    ]
+}

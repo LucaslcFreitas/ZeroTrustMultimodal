@@ -19,7 +19,11 @@ def showResults():
         password=config["dbPassword"]
     )
 
-    userRegistry = "460.395.930-32"
+    # userRegistry = "460.395.930-32"
+    # userRegistry = "649.122.660-35"
+    userRegistry = "859.310.680-31"
+    # userRegistry = "465.994.610-00"
+    # userRegistry = "773.391.700-06"
 
     try:
         with connection.cursor() as cursor:
@@ -85,3 +89,6 @@ def showResults():
     plt.yticks(fontsize=12)
 
     plt.show()
+
+if __name__ == '__main__':
+    showResults()

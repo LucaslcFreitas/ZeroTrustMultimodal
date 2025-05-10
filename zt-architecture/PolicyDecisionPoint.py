@@ -109,9 +109,8 @@ class PolicyDecisionPoint:
             self.pip.registerAccessDeniedOrReauthenticated(user['registry'], data['TOKEN'], data['LATITUDE'], data['LONGITUDE'], data['TIME'], data['IP_ADDRESS'], "Negado", 5, data['RESOURCE'], data['SUB_RESOURCE'], data['TYPE_ACTION'], idDeviceTMP, 5, 5, 5)
             return Response.RESOURCE_NOT_FOUND, None
 
-        # Verifica se o usuário possui permissão para acessar o recurso, caso contrário o acesso é nogado e registrado com confiança mínima
+        # Verifica se o usuário possui permissão para acessar o recurso
         if not self.pip.checkResourceUserPermissions(data['TOKEN'], data['RESOURCE'], data['SUB_RESOURCE'], data['TYPE_ACTION'], data['TIME']):
-            self.pip.registerAccessDeniedOrReauthenticated(user['registry'], data['TOKEN'], data['LATITUDE'], data['LONGITUDE'], data['TIME'], data['IP_ADDRESS'], "Negado", 5, data['RESOURCE'], data['SUB_RESOURCE'], data['TYPE_ACTION'], idDeviceTMP, 5, 5, 5)
             return Response.ACCESS_DENIED, None
 
         try:
@@ -128,30 +127,28 @@ class PolicyDecisionPoint:
             sensitivity = self.pip.getResourceSensibilityByName(data['RESOURCE'], data['SUB_RESOURCE'], data['TYPE_ACTION'])
 
             # Pega a informações de autenticação, como a precisão da medição ppg e ecg, case seja por senha, estabelece uma precisão fixa de 80
-            authenticationPrecision = self.pip.getAuthenticationPrecision(data['TOKEN'])
-            print(authenticationPrecision)
+            currentAuth = self.pip.getCurentAuthLevel(user['registry'])
+            averageAuth = 80
+            logging.info(currentAuth[0])
+            if currentAuth[0] == 'biometric':
+                averageAuth = (currentAuth[1] + currentAuth[2]) / 2
+            print(averageAuth)
         except Exception as e:
             return Response.INTERNAL_SERVER_ERROR, None
+        
+        authPond = self._biometric_normalize(averageAuth)
+        logging.info(authPond)
 
-        # Calcula a confinça final
-        # trust = self.sistema_fuzzy([userTrust, deviceTrust, historyTrust])
-        # trust = (userTrust + deviceTrust + historyTrust) / 3
         if historyTrust == 0:
             trust = math.sqrt(userTrust * deviceTrust) * 0.1
         else:
-            trust = math.sqrt(userTrust * deviceTrust) * (historyTrust/100)
+            trust = math.sqrt(userTrust * deviceTrust) * ((0.8 * (historyTrust/100)) + (0.2 * authPond))
 
         # Decisão final
         result = None
         if not (0 <= trust <= 100) or not (0 <= sensitivity <= 100):
             return Response.INTERNAL_SERVER_ERROR, None
-        
-        # if (trust <= 12.5 and sensitivity > 12.5) or (trust <= 25 and sensitivity > 25) or (trust <= 50 and sensitivity > 50) or (trust <= 62.5 and sensitivity > 87.5):
-        #     result = Response.ACCESS_DENIED
-        # elif (trust <= 62.5 and sensitivity > 50) or (trust <= 75 and sensitivity > 62.5) or (trust <= 87.5 and sensitivity > 75):
-        #     result = Response.REAUTHENTICATION_REQUIRED
-        # else:
-        #     result = Response.ACCESS_ALLOWED
+
         if (trust >= 0 and trust < 50) and (sensitivity >= 0 and sensitivity < 25):
             result = Response.REAUTHENTICATION_REQUIRED
         elif (trust >= 25 and trust < 50) and (sensitivity >= 0 and sensitivity < 75):
@@ -167,6 +164,13 @@ class PolicyDecisionPoint:
         elif (trust >= 75):
             result = Response.ACCESS_ALLOWED
 
+        # Protege os recursos mais sensíveis contra autenticação fraca
+        if result != Response.ACCESS_DENIED and sensitivity >= 75 and averageAuth < 75:
+            result = Response.REAUTHENTICATION_REQUIRED
+
+        # Verifica a necessidade de auteticação periódica
+        if result == Response.ACCESS_ALLOWED and self.pip.needToAuthenticate(user['registry']):
+            result = Response.REAUTHENTICATION_REQUIRED
         
         match (result):
             case Response.REAUTHENTICATION_REQUIRED:
@@ -192,6 +196,11 @@ class PolicyDecisionPoint:
                 return Response.INTERNAL_SERVER_ERROR, None
         
         return Response.INTERNAL_SERVER_ERROR, None
+    
+    def _biometric_normalize(self, value, min=80, max=100):
+        if value < min or value > max:
+            return 0
+        return (value - min) / (max - min)
     
     def __login(self, registry, date, MAC, DFP, OS, versionOs):
         redirectData = self.__redirectLogin(registry, date, MAC, DFP, OS, versionOs, 'password')
@@ -275,9 +284,11 @@ class PolicyDecisionPoint:
             for login in recentLogins:
                 if login[1] == 'Negado':
                     countFailedLogins += 1
-        if countFailedLogins >= 1 and countFailedLogins < 4:
-            trust -= 35
-        elif countFailedLogins >= 4 and countFailedLogins < 7:
+        if countFailedLogins >= 1 and countFailedLogins < 3:
+            trust -= 15
+        elif countFailedLogins >= 3 and countFailedLogins < 5:
+            trust -= 25
+        elif countFailedLogins >= 5 and countFailedLogins < 7:
             trust -= 47
         elif countFailedLogins >= 7:
             trust -= 60
