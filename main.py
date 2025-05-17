@@ -4,7 +4,9 @@ import reset
 import os
 import results.results_plot as plot
 from random_access.instance_random_normal import getRandomNormal
-from random_access.instance_random_improper_user import getRandomImproperUser
+from random_access.instance_random_improper_user_T1 import getRandomImproperUserT1
+from random_access.instance_random_improper_user_T2 import getRandomImproperUserT2
+from random_access.instance_random_improper_user_T3 import getRandomImproperUserT3
 
 dkr = docker.from_env()
 
@@ -39,7 +41,11 @@ def startClients():
             case "1":
                 instanceName = "randomNormal"
             case "2":
-                instanceName = "randomImproperUser"
+                instanceName = "randomImproperUserT1"
+            case "3":
+                instanceName = "randomImproperUserT2"
+            case "4":
+                instanceName = "randomImproperUserT3"
             case "13":
                 exit()
             case _:
@@ -50,8 +56,12 @@ def startClients():
 
     if instanceName == "randomNormal":
         clients = getRandomNormal(200)
-    elif instanceName == "randomImproperUser":
-        clients = getRandomImproperUser(200)
+    elif instanceName == "randomImproperUserT1":
+        clients = getRandomImproperUserT1(200)
+    elif instanceName == "randomImproperUserT2":
+        clients = getRandomImproperUserT2(200)
+    elif instanceName == "randomImproperUserT3":
+        clients = getRandomImproperUserT3(200)
 
 
     for idx, client in enumerate(clients):
@@ -76,7 +86,9 @@ def startClients():
 def printMenu():
     print("SELECIONE O CENÁRIO:")
     print("1 - Random Normal")
-    print("2 - Usuário Indevido")
+    print("2 - Usuário Indevido T1")
+    print("3 - Usuário Indevido T2")
+    print("4 - Usuário Indevido T3")
     print("13 - SAIR")
 
 if __name__ == "__main__":

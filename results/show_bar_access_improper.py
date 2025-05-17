@@ -96,6 +96,7 @@ def showBar():
     ax.set_ylim(0, 250)
 
     plt.show()
+    print(chartData)
 
 
 def getAccessScores(connection, registry, min):

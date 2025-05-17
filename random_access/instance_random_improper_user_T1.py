@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 # TODO: Variar localização, rede
-def getRandomNormal(min):
+def getRandomImproperUserT1(min):
     baseTimeOp = datetime.datetime.strptime("2025-04-09 10:34:19.047062", "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=datetime.timezone(datetime.timedelta(hours=-3)))
     baseTimeNu = datetime.datetime.strptime("2025-04-10 09:21:01.047062", "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=datetime.timezone(datetime.timedelta(hours=-3)))
     baseTimeAt = datetime.datetime.strptime("2025-04-14 15:42:37.047062", "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=datetime.timezone(datetime.timedelta(hours=-3)))
@@ -97,12 +97,20 @@ def createInstance(userInd, deviceInd, min, baseTime, resourcesPath):
             operations.append(getAccess(userData[userInd], deviceData[deviceInd], baseTime, resources['mediumSensivity'][ind]))
             baseTime = baseTime + datetime.timedelta(minutes=1)
 
-    if min > 50:
-        # Realiza acessos normais, de forma aleatória
-        resources = resources['veryLowSensivity'] + resources['lowSensivity'] + resources['mediumSensivity'] + resources['highSensivity']
-        random.shuffle(resources)
+    resources = resources['veryLowSensivity'] + resources['lowSensivity'] + resources['mediumSensivity'] + resources['highSensivity']
+    random.shuffle(resources)
 
-        for i in range(min - 50):
+    # Realiza 10 acessos normais, de forma aleatória
+    for i in range(10):
+        ind = random.randint(0, len(resources)-1)
+        operations.append(getAccess(userData[userInd], deviceData[deviceInd], baseTime, resources[ind]))
+        baseTime = baseTime + datetime.timedelta(minutes=1)
+
+    # Troca os sinais do usuário, simulando intrusão
+    operations.append(getChangeSignals(userData[userInd]['REGISTRY']))
+
+    if min > 60:
+        for i in range(min - 60):
             ind = random.randint(0, len(resources)-1)
             operations.append(getAccess(userData[userInd], deviceData[deviceInd], baseTime, resources[ind]))
             baseTime = baseTime + datetime.timedelta(minutes=1)
@@ -173,6 +181,14 @@ def add_variation_location(lat, lon, max=3):
 
     return new_lat, new_lon
 
+def getChangeSignals(registry):
+    return {
+        "TYPE": "CHANGE_SIGNALS",
+        "REGISTRY": registry,
+        "MIN": 0,
+        "MAX": 94
+    }
+
 # User data
 ind = [5, 15, 17, 20, 32, 35, 48, 49, 50, 59, 63, 68, 77, 83, 88, 92]
 userData = [
@@ -185,7 +201,7 @@ userData = [
         "DAYS_WORK": "Wednesday-Thursday-Friday-Saturday-Sunday",
         "START_WORKING_HOURS": "08:00:00",
         "END_WORKING_HOURS": "16:00:00",
-        "SIGNAL_INDEX": ind[random.randint(0, len(ind)-1)]
+        "SIGNAL_INDEX": ind[random.randint(0, 15)]
     },
     {
         "REGISTRY": "649.122.660-35",
@@ -196,7 +212,7 @@ userData = [
         "DAYS_WORK": "Tuesday-Wednesday-Thursday-Friday-Saturday",
         "START_WORKING_HOURS": "09:00:00",
         "END_WORKING_HOURS": "17:00:00",
-        "SIGNAL_INDEX": ind[random.randint(0, len(ind)-1)]
+        "SIGNAL_INDEX": ind[random.randint(0, 15)]
     },
     {
         "REGISTRY": "859.310.680-31",
@@ -207,7 +223,7 @@ userData = [
         "DAYS_WORK": "Sunday-Monday-Tuesday-Wednesday-Thursday",
         "START_WORKING_HOURS": "15:00:00",
         "END_WORKING_HOURS": "02:00:00",
-        "SIGNAL_INDEX": ind[random.randint(0, len(ind)-1)]
+        "SIGNAL_INDEX": ind[random.randint(0, 15)]
     },
     {
         "REGISTRY": "465.994.610-00",
@@ -218,7 +234,7 @@ userData = [
         "DAYS_WORK": "Thursday-Friday-Saturday-Sunday-Monday",
         "START_WORKING_HOURS": "13:00:00",
         "END_WORKING_HOURS": "22:00:00",
-        "SIGNAL_INDEX": ind[random.randint(0, len(ind)-1)]
+        "SIGNAL_INDEX": ind[random.randint(0, 15)]
     },
     {
         "REGISTRY": "773.391.700-06",
@@ -229,7 +245,7 @@ userData = [
         "DAYS_WORK": "",
         "START_WORKING_HOURS": "",
         "END_WORKING_HOURS": "",
-        "SIGNAL_INDEX": ind[random.randint(0, len(ind)-1)]
+        "SIGNAL_INDEX": ind[random.randint(0, 15)]
     }
 ]
 

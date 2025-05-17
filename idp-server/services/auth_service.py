@@ -255,10 +255,10 @@ class AuthService:
         # }
     
     def _is_authenticated(self, ppg_score, ecg_score):
-        if ppg_score > 70 or ecg_score > 70:
+        if ppg_score > 90 or ecg_score > 90:
             return True
         average = (ppg_score + ecg_score) / 2
-        if average > 75:
+        if average > 80:
             return True
         return False
     

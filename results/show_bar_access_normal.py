@@ -85,7 +85,7 @@ def showBar():
         multiplier += 1
 
     ax.set_ylabel('Quantidade')
-    ax.set_title('Acessos por usuários')
+    # ax.set_title('Acessos por usuários')
     ax.set_xticks(x + width*(len(chartData)-1)/2, users)
     ax.legend(loc='upper left', ncols=2)
     ax.set_ylim(0, 250)
